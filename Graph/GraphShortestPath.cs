@@ -60,6 +60,8 @@ namespace Graph
         public List<string> FindShortestPath(MyVertex src, MyVertex dst)
         {
             InitInfo();
+            if (dst == null) return new List<string>();
+            if (src == null) return new List<string>();
             var first = GetVertexInfo(src);
             first.edgesWeightSum = 0;
             while (true)
@@ -77,6 +79,8 @@ namespace Graph
         // Поиск кратчайшего пути
         public List<string> FindShortestPath(string src, string dst)
         {
+            if (dst == null) return new List<string>();
+            if (src == null) return new List<string>();
             return FindShortestPath(_graph.FindVertex(src), _graph.FindVertex(dst));
         }
 
@@ -99,11 +103,21 @@ namespace Graph
         // Формирование пути строкой
         private List<string> GetPath(MyVertex src, MyVertex dst)
         {
+            if (dst == null) return new List<string>();
+            if(src == null) return new List<string>();
             var path = dst.ToString();
             while (src != dst)
             {
+                try
+                {
                 dst = GetVertexInfo(dst).previousVertex;
-                path = dst.ToString() + "?" + path;
+                    if (dst == null) return new List<string>();
+                    path = dst.ToString() + "?" + path;
+                }
+                catch
+                {
+                return new List<string>();
+                }
             }
             string buf = "";
             List<string> list = new List<string>();

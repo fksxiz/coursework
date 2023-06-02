@@ -184,7 +184,7 @@ namespace Graph
             _shortestPath=new GraphShortestPath(_graph);
             vertexCoordinates = new List<VertexCoordinatesEdge>();
             edgeCoordinates = new List<EdgeCoordinates>();
-        OnResetGraph();
+            OnResetGraph();
             Invalidate();
         }
 
@@ -211,8 +211,8 @@ namespace Graph
                 }
                 edgeCoordinates.Add(new EdgeCoordinates(x1, x2, y1, y2, src, dst,weight.ToString(),false));
                 _graph.AddEdge(src, dst, weight);
+                OnEdgeAdd();
             }
-            OnEdgeAdd();
             Invalidate();
         }
 
@@ -222,7 +222,7 @@ namespace Graph
             _shortestPath = new GraphShortestPath(_graph);
             var vertices = _shortestPath.FindShortestPath(src, dst);
             SetShortestPath(vertices);
-            OnFindShortestPath();
+            if(vertices.Count>0) OnFindShortestPath();
             Invalidate();
         }
 
