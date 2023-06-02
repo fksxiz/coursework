@@ -190,10 +190,17 @@ namespace Graph
 
         private void addVertex(int x, int y)
         {
-            _VertexCount++;
-            vertexCoordinates.Add(new VertexCoordinatesEdge(_VertexCount.ToString(), x,y,false));
-            _graph.AddVertex(_VertexCount.ToString());
-            OnVertexAdd();
+            foreach (VertexCoordinatesEdge v in vertexCoordinates)
+            {
+                if (((x <= v.x+_VertexSize && x>=v.x-_VertexSize)&&(y<=v.y+_VertexSize && y>=v.y-_VertexSize)))
+                {
+                    return;
+                }
+            }
+                _VertexCount++;
+                vertexCoordinates.Add(new VertexCoordinatesEdge(_VertexCount.ToString(), x, y, false));
+                _graph.AddVertex(_VertexCount.ToString());
+                OnVertexAdd();
             Invalidate();
         }
 
@@ -280,7 +287,7 @@ namespace Graph
             {
                 height = 400;
             }
-            _VertexSize = Math.Min(width, height) / 20;
+            _VertexSize = 20;
             base.SetBoundsCore(x, y, width, height, specified);
             Invalidate();
         }
