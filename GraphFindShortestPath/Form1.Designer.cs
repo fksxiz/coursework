@@ -44,9 +44,9 @@
             this.stateButton = new System.Windows.Forms.Button();
             this.EventsListBox = new System.Windows.Forms.ListBox();
             this.ResetButton = new System.Windows.Forms.Button();
-            this.graphEditor1 = new Graph.GraphEditor();
             this.label1 = new System.Windows.Forms.Label();
             this.pathTextBox = new System.Windows.Forms.TextBox();
+            this.graphEditor1 = new Graph.GraphEditor();
             this.SuspendLayout();
             // 
             // AddVertexButton
@@ -191,32 +191,6 @@
             this.ResetButton.UseVisualStyleBackColor = false;
             this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
             // 
-            // graphEditor1
-            // 
-            this.graphEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.graphEditor1.BackColor = System.Drawing.Color.Silver;
-            this.graphEditor1.DarkColor = System.Drawing.Color.DarkGray;
-            this.graphEditor1.EdgeColor = System.Drawing.Color.Gray;
-            this.graphEditor1.IsEdgeAddMode = false;
-            this.graphEditor1.IsVertexAddMode = false;
-            this.graphEditor1.LightColor = System.Drawing.Color.Gray;
-            this.graphEditor1.Location = new System.Drawing.Point(263, 12);
-            this.graphEditor1.Name = "graphEditor1";
-            this.graphEditor1.ObjState = Graph.GraphEditor.ObjStates.osConvex;
-            this.graphEditor1.ShortestPathColor = System.Drawing.Color.Green;
-            this.graphEditor1.Size = new System.Drawing.Size(525, 419);
-            this.graphEditor1.TabIndex = 19;
-            this.graphEditor1.Text = "graphEditor1";
-            this.graphEditor1.TextColor = System.Drawing.Color.Red;
-            this.graphEditor1.VertexColor = System.Drawing.Color.Black;
-            this.graphEditor1.ChangeState += new System.EventHandler(this.graphEditor1_ChangeState);
-            this.graphEditor1.VertexAdd += new System.EventHandler(this.graphEditor1_VertexAdd);
-            this.graphEditor1.EdgeAdd += new System.EventHandler(this.graphEditor1_EdgeAdd);
-            this.graphEditor1.FindedShortestPath += new System.EventHandler(this.graphEditor1_FindedShortestPath);
-            this.graphEditor1.ResetGraph += new System.EventHandler(this.graphEditor1_ResetGraph);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -232,6 +206,32 @@
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(160, 20);
             this.pathTextBox.TabIndex = 23;
+            // 
+            // graphEditor1
+            // 
+            this.graphEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.graphEditor1.BackColor = System.Drawing.Color.Silver;
+            this.graphEditor1.DarkColor = System.Drawing.Color.DarkGray;
+            this.graphEditor1.EdgeColor = System.Drawing.Color.Gray;
+            this.graphEditor1.IsEdgeAddMode = false;
+            this.graphEditor1.IsVertexAddMode = false;
+            this.graphEditor1.LightColor = System.Drawing.Color.Gray;
+            this.graphEditor1.Location = new System.Drawing.Point(263, 12);
+            this.graphEditor1.Name = "graphEditor1";
+            this.graphEditor1.ObjState = Graph.GraphEditor.ObjStates.osConcavity;
+            this.graphEditor1.ShortestPathColor = System.Drawing.Color.Green;
+            this.graphEditor1.Size = new System.Drawing.Size(525, 419);
+            this.graphEditor1.TabIndex = 19;
+            this.graphEditor1.Text = "graphEditor1";
+            this.graphEditor1.TextColor = System.Drawing.Color.Red;
+            this.graphEditor1.VertexColor = System.Drawing.Color.Black;
+            this.graphEditor1.ChangeState += new System.EventHandler(this.graphEditor1_ChangeState);
+            this.graphEditor1.VertexAdd += new System.EventHandler(this.graphEditor1_VertexAdd);
+            this.graphEditor1.EdgeAdd += new System.EventHandler(this.graphEditor1_EdgeAdd);
+            this.graphEditor1.FindedShortestPath += new System.EventHandler(this.graphEditor1_FindedShortestPath);
+            this.graphEditor1.ResetGraph += new System.EventHandler(this.graphEditor1_ResetGraph);
             // 
             // Form1
             // 

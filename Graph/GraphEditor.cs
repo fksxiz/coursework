@@ -75,6 +75,7 @@ namespace Graph
             _LightColor = Color.Gray;
             _graph = new MyGraph();
             _VertexCount = 0;
+            InitSounds();
         }
      
         public Color VertexColor
@@ -177,6 +178,21 @@ namespace Graph
         private GraphShortestPath _shortestPath;
         protected List<VertexCoordinatesEdge> vertexCoordinates = new List<VertexCoordinatesEdge>();
         protected List<EdgeCoordinates> edgeCoordinates = new List<EdgeCoordinates>();
+        private System.Media.SoundPlayer addVertexOrEdge;
+        private System.Media.SoundPlayer changeState;
+        private System.Media.SoundPlayer findAction;
+        private System.Media.SoundPlayer prohibitionOfAction;
+        private System.Media.SoundPlayer resetAction;
+
+        private void InitSounds()
+        {
+           var exePath = Environment.CurrentDirectory;
+            addVertexOrEdge = new System.Media.SoundPlayer(Path.Combine(exePath,@"sounds\", "addVertexOrEdge.wav"));
+            changeState = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "changeState.wav"));
+            findAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "findAction.wav"));
+            prohibitionOfAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "prohibitionOfAction.wav"));
+            resetAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "reset.wav"));
+        }
 
         public void Reset()
         {
@@ -186,6 +202,7 @@ namespace Graph
             edgeCoordinates = new List<EdgeCoordinates>();
             _VertexCount = 0;
             OnResetGraph();
+            resetAction.Play();
             Invalidate();
         }
 
@@ -195,6 +212,7 @@ namespace Graph
             {
                 if (((x <= v.x+_VertexSize && x>=v.x-_VertexSize)&&(y<=v.y+_VertexSize && y>=v.y-_VertexSize)))
                 {
+                    prohibitionOfAction.Play();
                     return;
                 }
             }
@@ -203,6 +221,7 @@ namespace Graph
                 _graph.AddVertex(_VertexCount.ToString());
                 OnVertexAdd();
             _IsVertexAddMode = false;
+            addVertexOrEdge.Play();
             Invalidate();
         }
 
@@ -211,6 +230,7 @@ namespace Graph
             if (_graph.FindVertex(src)!=null && _graph.FindVertex(dst) != null) {
                 foreach(EdgeCoordinates edge in edgeCoordinates)
                 {
+                    prohibitionOfAction.Play();
                     if ((edge.src == src && edge.dst == dst)|| (edge.src == dst && edge.dst == src)) return;
                 }
                 int x1=0;
@@ -224,6 +244,7 @@ namespace Graph
                 }
                 edgeCoordinates.Add(new EdgeCoordinates(x1, x2, y1, y2, src, dst,weight.ToString(),false));
                 _graph.AddEdge(src, dst, weight);
+                addVertexOrEdge.Play();
                 OnEdgeAdd();
             }
             Invalidate();
@@ -243,6 +264,7 @@ namespace Graph
                 if (buf != "") buf += ", ";
                 buf+= vertex;
             }
+            if(buf!="") findAction.Play(); else prohibitionOfAction.Play();
             return buf;
         }
 
@@ -287,6 +309,7 @@ namespace Graph
             int I = (int)_ObjState + 1;
             I = I > 1 ? 0 : I;
             ObjState = (ObjStates)I;
+            changeState.Play();
             OnChangeState();
         }
 

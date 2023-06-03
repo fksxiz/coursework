@@ -55,5 +55,11 @@
     <Compile Include="VertexCoordinatesEdge.cs" />
     <Compile Include="VertexInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="sounds\addVertexOrEdge.wav" />
+    <Content Include="sounds\changeState.wav" />
+    <Content Include="sounds\findAction.wav" />
+    <Content Include="sounds\prohibitionOfAction.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
