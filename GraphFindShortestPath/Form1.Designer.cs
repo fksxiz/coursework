@@ -46,8 +46,8 @@
             this.ResetButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pathTextBox = new System.Windows.Forms.TextBox();
-            this.graphEditor1 = new Graph.GraphEditor();
             this.SoundsButton = new System.Windows.Forms.Button();
+            this.graphEditor1 = new Graph.GraphEditor();
             this.SuspendLayout();
             // 
             // AddVertexButton
@@ -208,6 +208,17 @@
             this.pathTextBox.Size = new System.Drawing.Size(160, 20);
             this.pathTextBox.TabIndex = 23;
             // 
+            // SoundsButton
+            // 
+            this.SoundsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SoundsButton.Location = new System.Drawing.Point(12, 284);
+            this.SoundsButton.Name = "SoundsButton";
+            this.SoundsButton.Size = new System.Drawing.Size(245, 23);
+            this.SoundsButton.TabIndex = 24;
+            this.SoundsButton.Text = "On/Off sounds";
+            this.SoundsButton.UseVisualStyleBackColor = true;
+            this.SoundsButton.Click += new System.EventHandler(this.SoundsButton_Click);
+            // 
             // graphEditor1
             // 
             this.graphEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -224,7 +235,7 @@
             this.graphEditor1.ObjState = Graph.GraphEditor.ObjStates.osConcavity;
             this.graphEditor1.ShortestPathColor = System.Drawing.Color.Green;
             this.graphEditor1.Size = new System.Drawing.Size(525, 419);
-            this.graphEditor1.SoundsOn = false;
+            this.graphEditor1.SoundsOn = true;
             this.graphEditor1.TabIndex = 19;
             this.graphEditor1.Text = "graphEditor1";
             this.graphEditor1.TextColor = System.Drawing.Color.Red;
@@ -234,17 +245,6 @@
             this.graphEditor1.EdgeAdd += new System.EventHandler(this.graphEditor1_EdgeAdd);
             this.graphEditor1.FindedShortestPath += new System.EventHandler(this.graphEditor1_FindedShortestPath);
             this.graphEditor1.ResetGraph += new System.EventHandler(this.graphEditor1_ResetGraph);
-            // 
-            // SoundsButton
-            // 
-            this.SoundsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SoundsButton.Location = new System.Drawing.Point(12, 284);
-            this.SoundsButton.Name = "SoundsButton";
-            this.SoundsButton.Size = new System.Drawing.Size(245, 23);
-            this.SoundsButton.TabIndex = 24;
-            this.SoundsButton.Text = "On/Off sounds";
-            this.SoundsButton.UseVisualStyleBackColor = true;
-            this.SoundsButton.Click += new System.EventHandler(this.SoundsButton_Click);
             // 
             // Form1
             // 

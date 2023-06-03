@@ -100,7 +100,7 @@ namespace Graph
             }
         }
 
-        // Формирование пути строкой
+        // Формирование пути в формате листа из строк
         private List<string> GetPath(MyVertex src, MyVertex dst)
         {
             if (dst == null) return new List<string>();
