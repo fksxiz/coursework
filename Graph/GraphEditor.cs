@@ -62,22 +62,24 @@ namespace Graph
         public virtual bool IsVertexAddMode
         {
             get { return _IsVertexAddMode; }
-            set { 
-                if( _IsVertexAddMode != value )
+            set
+            {
+                if (_IsVertexAddMode != value)
                 {
                     _IsVertexAddMode = value;
                 }
-                }
-        } 
+            }
+        }
         public virtual bool IsEdgeAddMode
         {
             get { return _IsEdgeAddMode; }
-            set { 
-                if(_IsEdgeAddMode != value )
+            set
+            {
+                if (_IsEdgeAddMode != value)
                 {
                     _IsEdgeAddMode = value;
                 }
-                }
+            }
         }
 
         public virtual bool SoundsOn
@@ -108,8 +110,8 @@ namespace Graph
 
             }
         }
-     
-        public Color VertexColor
+
+        public virtual Color VertexColor
         {
             get
             {
@@ -125,7 +127,7 @@ namespace Graph
             }
         }
 
-        public Color ShortestPathColor
+        public virtual Color ShortestPathColor
         {
             get
             {
@@ -141,7 +143,7 @@ namespace Graph
             }
         }
 
-        public Color EdgeColor
+        public virtual Color EdgeColor
         {
             get
             {
@@ -157,7 +159,7 @@ namespace Graph
             }
         }
 
-        public Color TextColor
+        public virtual Color TextColor
         {
             get
             {
@@ -173,7 +175,7 @@ namespace Graph
             }
         }
 
-        public Color DarkColor
+        public virtual Color DarkColor
         {
             get
             {
@@ -189,7 +191,7 @@ namespace Graph
             }
         }
 
-        public Color LightColor
+        public virtual Color LightColor
         {
             get
             {
@@ -208,10 +210,10 @@ namespace Graph
         /// <summary>
         /// Метод инициализации звуков
         /// </summary>
-        private void InitSounds()
+        protected virtual void InitSounds()
         {
-           var exePath = Environment.CurrentDirectory;
-            addVertexOrEdge = new System.Media.SoundPlayer(Path.Combine(exePath,@"sounds\", "addVertexOrEdge.wav"));
+            var exePath = Environment.CurrentDirectory;
+            addVertexOrEdge = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "addVertexOrEdge.wav"));
             changeState = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "changeState.wav"));
             findAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "findAction.wav"));
             prohibitionOfAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "prohibitionOfAction.wav"));
@@ -221,16 +223,16 @@ namespace Graph
         /// <summary>
         /// Метод сброса графа
         /// </summary>
-        public void Reset()
+        public virtual void Reset()
         {
             _graph = new MyGraph();
-            _shortestPath=new GraphShortestPath(_graph);
+            _shortestPath = new GraphShortestPath(_graph);
             vertexCoordinates = new List<VertexCoordinatesEdge>();
             edgeCoordinates = new List<EdgeCoordinates>();
             _VertexCount = 0;
             OnResetGraph();
-            if(SoundsOn)
-            resetAction.Play();
+            if (SoundsOn)
+                resetAction.Play();
             Invalidate();
         }
 
@@ -239,9 +241,9 @@ namespace Graph
         /// </summary>
         /// <param name="x">x координата вершины</param>
         /// <param name="y">y координата вершины</param>
-        private void addVertex(int x, int y)
+        protected virtual void addVertex(int x, int y)
         {
-            if ((x <= Math.Min(Height, Width) / 15)||(x>=Width- Math.Min(Height, Width) / 15)||(y<= Math.Min(Height, Width) / 15)||(y>=Height- Math.Min(Height, Width) / 15))
+            if ((x <= Math.Min(Height, Width) / 15) || (x >= Width - Math.Min(Height, Width) / 15) || (y <= Math.Min(Height, Width) / 15) || (y >= Height - Math.Min(Height, Width) / 15))
             {
                 if (SoundsOn)
                     prohibitionOfAction.Play();
@@ -249,17 +251,17 @@ namespace Graph
             }
             foreach (VertexCoordinatesEdge v in vertexCoordinates)
             {
-                if (((x <= v.x+_VertexSize && x>=v.x-_VertexSize)&&(y<=v.y+_VertexSize && y>=v.y-_VertexSize)))
+                if (((x <= v.x + _VertexSize && x >= v.x - _VertexSize) && (y <= v.y + _VertexSize && y >= v.y - _VertexSize)))
                 {
                     if (SoundsOn)
                         prohibitionOfAction.Play();
                     return;
                 }
             }
-                _VertexCount++;
-                vertexCoordinates.Add(new VertexCoordinatesEdge(_VertexCount.ToString(), x, y, false));
-                _graph.AddVertex(_VertexCount.ToString());
-                OnVertexAdd();
+            _VertexCount++;
+            vertexCoordinates.Add(new VertexCoordinatesEdge(_VertexCount.ToString(), x, y, false));
+            _graph.AddVertex(_VertexCount.ToString());
+            OnVertexAdd();
             _IsVertexAddMode = false;
             if (SoundsOn)
                 addVertexOrEdge.Play();
@@ -270,29 +272,31 @@ namespace Graph
         /// <summary>
         /// Метод добавления грани на граф
         /// </summary>
-        public void addEdge(string src,string dst,int weight)
+        public virtual void addEdge(string src, string dst, int weight)
         {
-            if (src==dst) {
+            if (src == dst)
+            {
                 if (SoundsOn) prohibitionOfAction.Play();
                 return;
             }
-            if (_graph.FindVertex(src)!=null && _graph.FindVertex(dst) != null) {
-                foreach(EdgeCoordinates edge in edgeCoordinates)
+            if (_graph.FindVertex(src) != null && _graph.FindVertex(dst) != null)
+            {
+                foreach (EdgeCoordinates edge in edgeCoordinates)
                 {
                     if (SoundsOn)
                         prohibitionOfAction.Play();
-                    if ((edge.src == src && edge.dst == dst)|| (edge.src == dst && edge.dst == src)) return;
+                    if ((edge.src == src && edge.dst == dst) || (edge.src == dst && edge.dst == src)) return;
                 }
-                int x1=0;
-                int x2=0;
-                int y1=0;
-                int y2=0;
+                int x1 = 0;
+                int x2 = 0;
+                int y1 = 0;
+                int y2 = 0;
                 foreach (VertexCoordinatesEdge vertex in vertexCoordinates)
                 {
-                    if (vertex.name==src) { x1 = vertex.x; y1 = vertex.y; }
-                    if (vertex.name==dst) { x2 = vertex.x; y2 = vertex.y; }
+                    if (vertex.name == src) { x1 = vertex.x; y1 = vertex.y; }
+                    if (vertex.name == dst) { x2 = vertex.x; y2 = vertex.y; }
                 }
-                edgeCoordinates.Add(new EdgeCoordinates(x1, x2, y1, y2, src, dst,weight.ToString(),false));
+                edgeCoordinates.Add(new EdgeCoordinates(x1, x2, y1, y2, src, dst, weight.ToString(), false));
                 _graph.AddEdge(src, dst, weight);
                 if (SoundsOn)
                     addVertexOrEdge.Play();
@@ -304,48 +308,48 @@ namespace Graph
         /// <summary>
         /// Метод поиска кратчайшего пути в графе
         /// </summary>
-        public string FindShortestPath(string src,string dst)
+        public virtual string FindShortestPath(string src, string dst)
         {
             ResetShortestPath();
             _shortestPath = new GraphShortestPath(_graph);
             var vertices = _shortestPath.FindShortestPath(src, dst);
             SetShortestPath(vertices);
-            if(vertices.Count>0) OnFindShortestPath();
+            if (vertices.Count > 0) OnFindShortestPath();
             Invalidate();
             string buf = "";
             foreach (string vertex in vertices)
             {
                 if (buf != "") buf += ", ";
-                buf+= vertex;
+                buf += vertex;
             }
             if (SoundsOn)
-                if (buf!="") findAction.Play(); else prohibitionOfAction.Play();
+                if (buf != "") findAction.Play(); else prohibitionOfAction.Play();
             return buf;
         }
 
         /// <summary>
         /// Метод сброса флагов кратчайшего пути для вершин и граней
         /// </summary>
-        private void ResetShortestPath()
+        protected virtual void ResetShortestPath()
         {
             foreach (var ver in vertexCoordinates)
             {
-              ver.isShortestPath = false;
+                ver.isShortestPath = false;
             }
             foreach (var e in edgeCoordinates)
             {
-              e.isShortestPath = false;
+                e.isShortestPath = false;
             }
         }
 
         /// <summary>
         /// Метод установки флагов кратчайшего пути для вершин и граней
         /// </summary>
-        private void SetShortestPath(List<string> vertices)
+        protected virtual void SetShortestPath(List<string> vertices)
         {
             foreach (var vertexName in vertices)
             {
-                foreach(var ver in vertexCoordinates)
+                foreach (var ver in vertexCoordinates)
                 {
                     if (ver.name == vertexName)
                     {
@@ -353,11 +357,11 @@ namespace Graph
                     }
                 }
             }
-            for (int i = 0; i < vertices.Count-1; i++)
+            for (int i = 0; i < vertices.Count - 1; i++)
             {
                 foreach (var e in edgeCoordinates)
                 {
-                    if ((e.src == vertices[i] && e.dst == vertices[i + 1])||(e.dst == vertices[i] && e.src == vertices[i + 1]))
+                    if ((e.src == vertices[i] && e.dst == vertices[i + 1]) || (e.dst == vertices[i] && e.src == vertices[i + 1]))
                     {
                         e.isShortestPath = true;
                     }
@@ -403,8 +407,8 @@ namespace Graph
         {
             Brush VertexBrush = new SolidBrush(_VertexColor);
             Brush ShortestPathBrush = new SolidBrush(_ShortestPathColor);
-            Pen ShortestPathPen = new Pen(_ShortestPathColor,5);
-            Pen EdgePen = new Pen(_EdgeColor,5);
+            Pen ShortestPathPen = new Pen(_ShortestPathColor, 5);
+            Pen EdgePen = new Pen(_EdgeColor, 5);
             Pen LightPen = new Pen(_LightColor);
             Pen DarkPen = new Pen(_DarkColor);
             int FontSize = (int)Math.Round((_VertexSize - 16) * 92 / e.Graphics.DpiY);
@@ -418,7 +422,7 @@ namespace Graph
             Fmt.LineAlignment = StringAlignment.Center;
             Fmt.Alignment = StringAlignment.Center;
             DrawWindowState(e, DarkPen, LightPen);
-            DrawEdges(e,EdgePen,ShortestPathPen,font,TextBrush,Fmt);
+            DrawEdges(e, EdgePen, ShortestPathPen, font, TextBrush, Fmt);
             DrawVertices(e, VertexBrush, ShortestPathBrush, font, TextBrush, Fmt);
 
             base.OnPaint(e);
@@ -430,7 +434,7 @@ namespace Graph
         /// <param name="e">Графика</param>
         /// <param name="DarkPen">Тёмный карандаш</param>
         /// <param name="LightPen">Светлый карандаш</param>
-        private void DrawWindowState(PaintEventArgs e, Pen DarkPen, Pen LightPen)
+        protected virtual void DrawWindowState(PaintEventArgs e, Pen DarkPen, Pen LightPen)
         {
             for (int i = 0; i < Math.Min(Height, Width) / 15; i++)
             {
@@ -468,7 +472,7 @@ namespace Graph
         /// <param name="font">Шрифт</param>
         /// <param name="TextBrush">Кисть для отрисовки текста</param>
         /// <param name="Fmt">Формат строки</param>
-        private void DrawEdges(PaintEventArgs e, Pen EdgePen, Pen ShortestPathPen, Font font, SolidBrush TextBrush, StringFormat Fmt)
+        protected virtual void DrawEdges(PaintEventArgs e, Pen EdgePen, Pen ShortestPathPen, Font font, SolidBrush TextBrush, StringFormat Fmt)
         {
             Fmt.LineAlignment = StringAlignment.Center;
             foreach (var edge in edgeCoordinates)
@@ -477,11 +481,11 @@ namespace Graph
                 {
                     if (edge.x1 - _VertexSize / 2 < Math.Min(Height, Width) / 15)
                     {
-                        edge.x1 = Math.Min(Height, Width) / 15+_VertexSize / 2;
+                        edge.x1 = Math.Min(Height, Width) / 15 + _VertexSize / 2;
                     }
                     else
                     {
-                        if (edge.x1 + _VertexSize / 2 > Width- Math.Min(Height, Width) / 15)
+                        if (edge.x1 + _VertexSize / 2 > Width - Math.Min(Height, Width) / 15)
                         {
                             edge.x1 = Width - Math.Min(Height, Width) / 15 - _VertexSize / 2;
                         }
@@ -492,34 +496,34 @@ namespace Graph
                     }
                     else
                     {
-                        if (edge.y1 + _VertexSize / 2 > Height- Math.Min(Height, Width) / 15)
+                        if (edge.y1 + _VertexSize / 2 > Height - Math.Min(Height, Width) / 15)
                         {
                             edge.y1 = Height - Math.Min(Height, Width) / 15 - _VertexSize / 2;
                         }
                     }
                     if (edge.x2 - _VertexSize / 2 < Math.Min(Height, Width) / 15)
                     {
-                        edge.x2 = Math.Min(Height, Width) / 15+_VertexSize / 2;
+                        edge.x2 = Math.Min(Height, Width) / 15 + _VertexSize / 2;
                     }
                     else
                     {
                         if (edge.x2 + _VertexSize / 2 > Width - Math.Min(Height, Width) / 15)
                         {
-                            edge.x2 = Width- Math.Min(Height, Width) / 15 - _VertexSize / 2;
+                            edge.x2 = Width - Math.Min(Height, Width) / 15 - _VertexSize / 2;
                         }
                     }
                     if (edge.y2 - _VertexSize / 2 < Math.Min(Height, Width) / 15)
                     {
-                        edge.y2 = Math.Min(Height, Width) / 15+_VertexSize / 2;
+                        edge.y2 = Math.Min(Height, Width) / 15 + _VertexSize / 2;
                     }
                     else
                     {
-                        if (edge.y2 + _VertexSize / 2 > Height- Math.Min(Height, Width) / 15)
+                        if (edge.y2 + _VertexSize / 2 > Height - Math.Min(Height, Width) / 15)
                         {
-                            edge.y2 = Height - _VertexSize / 2-Math.Min(Height, Width) / 15;
+                            edge.y2 = Height - _VertexSize / 2 - Math.Min(Height, Width) / 15;
                         }
                     }
-                    
+
                     if (!edge.isShortestPath)
                     {
                         e.Graphics.DrawLine(EdgePen, edge.x1, edge.y1, edge.x2, edge.y2);
@@ -546,7 +550,7 @@ namespace Graph
         /// <param name="font">Шрифт</param>
         /// <param name="TextBrush">Кисть для отрисовки текста</param>
         /// <param name="Fmt">Формат строки</param>
-        private void DrawVertices(PaintEventArgs e, Brush VertexBrush, Brush ShortestPathBrush, Font font, SolidBrush TextBrush, StringFormat Fmt)
+        protected virtual void DrawVertices(PaintEventArgs e, Brush VertexBrush, Brush ShortestPathBrush, Font font, SolidBrush TextBrush, StringFormat Fmt)
         {
             Fmt.LineAlignment = StringAlignment.Center;
             foreach (var vertex in vertexCoordinates)
@@ -555,22 +559,22 @@ namespace Graph
                 {
                     if (vertex.x - _VertexSize / 2 < Math.Min(Height, Width) / 15)
                     {
-                        vertex.x = Math.Min(Height, Width) / 15+_VertexSize / 2;
+                        vertex.x = Math.Min(Height, Width) / 15 + _VertexSize / 2;
                     }
                     else
                     {
-                        if (vertex.x + _VertexSize / 2 > Width- Math.Min(Height, Width) / 15)
+                        if (vertex.x + _VertexSize / 2 > Width - Math.Min(Height, Width) / 15)
                         {
-                            vertex.x = Width- Math.Min(Height, Width) / 15 - _VertexSize / 2;
+                            vertex.x = Width - Math.Min(Height, Width) / 15 - _VertexSize / 2;
                         }
                     }
                     if (vertex.y - _VertexSize / 2 < Math.Min(Height, Width) / 15)
                     {
-                        vertex.y = Math.Min(Height, Width) / 15+_VertexSize / 2;
+                        vertex.y = Math.Min(Height, Width) / 15 + _VertexSize / 2;
                     }
                     else
                     {
-                        if (vertex.y + _VertexSize / 2 > Height- Math.Min(Height, Width) / 15)
+                        if (vertex.y + _VertexSize / 2 > Height - Math.Min(Height, Width) / 15)
                         {
                             vertex.y = Height - Math.Min(Height, Width) / 15 - _VertexSize / 2;
                         }
@@ -583,7 +587,7 @@ namespace Graph
                     {
                         e.Graphics.FillEllipse(VertexBrush, vertex.x - _VertexSize / 2, vertex.y - _VertexSize / 2, _VertexSize, _VertexSize);
                     }
-                    RectangleF Rect = new RectangleF(vertex.x - _VertexSize, vertex.y - _VertexSize / 2, _VertexSize*2, _VertexSize);
+                    RectangleF Rect = new RectangleF(vertex.x - _VertexSize, vertex.y - _VertexSize / 2, _VertexSize * 2, _VertexSize);
                     String S = vertex.name;
                     e.Graphics.DrawString(S, font, TextBrush, Rect, Fmt);
                 }
@@ -601,7 +605,7 @@ namespace Graph
             {
                 if (_IsVertexAddMode)
                 {
-                    addVertex(x,y);
+                    addVertex(x, y);
                 }
                 base.OnMouseDown(e);
             }
@@ -610,7 +614,8 @@ namespace Graph
 
         protected override CreateParams CreateParams
         {
-            get { 
+            get
+            {
                 CreateParams P = base.CreateParams;
                 P.ExStyle = P.ExStyle | 0x02000000;
                 return P;
