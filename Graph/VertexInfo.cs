@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace Graph
 {
+    /// <summary>
+    /// Информация о вершине
+    /// </summary>
     public class VertexInfo
     {
-
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="vertex">Вершина</param>
         public VertexInfo(MyVertex vertex) { 
             this.vertex = vertex;
             isUnvisited = true;
@@ -21,6 +27,9 @@ namespace Graph
         private int _edgesWeightSum;
         private MyVertex _previousVertex;
 
+        /// <summary>
+        /// Вершина
+        /// </summary>
         public MyVertex vertex {
             get 
             {
@@ -35,6 +44,9 @@ namespace Graph
             }
         }
 
+        /// <summary>
+        /// Не посещенная вершина
+        /// </summary>
         public bool isUnvisited
         {
             get
@@ -49,6 +61,9 @@ namespace Graph
             }
         }
 
+        /// <summary>
+        /// Сумма весов ребер
+        /// </summary>
         public int edgesWeightSum
         {
             get
@@ -64,6 +79,9 @@ namespace Graph
             }
         }
 
+        /// <summary>
+        /// Предыдущая вершина
+        /// </summary>
         public MyVertex previousVertex
         {
             get

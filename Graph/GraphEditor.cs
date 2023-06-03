@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace Graph
 {
@@ -240,6 +241,12 @@ namespace Graph
         /// <param name="y">y координата вершины</param>
         private void addVertex(int x, int y)
         {
+            if ((x <= Math.Min(Height, Width) / 15)||(x>=Width- Math.Min(Height, Width) / 15)||(y<= Math.Min(Height, Width) / 15)||(y>=Height- Math.Min(Height, Width) / 15))
+            {
+                if (SoundsOn)
+                    prohibitionOfAction.Play();
+                return;
+            }
             foreach (VertexCoordinatesEdge v in vertexCoordinates)
             {
                 if (((x <= v.x+_VertexSize && x>=v.x-_VertexSize)&&(y<=v.y+_VertexSize && y>=v.y-_VertexSize)))
@@ -265,6 +272,10 @@ namespace Graph
         /// </summary>
         public void addEdge(string src,string dst,int weight)
         {
+            if (src==dst) {
+                if (SoundsOn) prohibitionOfAction.Play();
+                return;
+            }
             if (_graph.FindVertex(src)!=null && _graph.FindVertex(dst) != null) {
                 foreach(EdgeCoordinates edge in edgeCoordinates)
                 {
@@ -396,10 +407,10 @@ namespace Graph
             Pen EdgePen = new Pen(_EdgeColor,5);
             Pen LightPen = new Pen(_LightColor);
             Pen DarkPen = new Pen(_DarkColor);
-            int FontSize = (int)Math.Round((_VertexSize - 16) * 120 / e.Graphics.DpiY);
-            if (FontSize <= 16)
+            int FontSize = (int)Math.Round((_VertexSize - 16) * 92 / e.Graphics.DpiY);
+            if (FontSize <= 12)
             {
-                FontSize = 16;
+                FontSize = 12;
             }
             Font font = new Font("Arial", FontSize);
             SolidBrush TextBrush = new SolidBrush(_TextColor);
@@ -416,6 +427,7 @@ namespace Graph
         /// <summary>
         /// Метод отрисовки выпуклостей/вогнутостей
         /// </summary>
+        /// <param name="e">Графика</param>
         /// <param name="DarkPen">Тёмный карандаш</param>
         /// <param name="LightPen">Светлый карандаш</param>
         private void DrawWindowState(PaintEventArgs e, Pen DarkPen, Pen LightPen)
@@ -518,7 +530,7 @@ namespace Graph
                     }
                     int x = (Math.Min(edge.x2, edge.x1) - _VertexSize) + ((Math.Max(edge.x2, edge.x1) - _VertexSize) - (Math.Min(edge.x1, edge.x2) - _VertexSize)) / 2;
                     int y = (Math.Min(edge.y2, edge.y1) - _VertexSize / 2) + ((Math.Max(edge.y2, edge.y1) - _VertexSize / 2) - (Math.Min(edge.y1, edge.y2) - _VertexSize / 2)) / 2;
-                    RectangleF Rect = new RectangleF(x, y, _VertexSize * 3, _VertexSize);
+                    RectangleF Rect = new RectangleF(x, y, _VertexSize * 2, _VertexSize);
                     String S = edge.weight;
                     e.Graphics.DrawString(S, font, TextBrush, Rect, Fmt);
                 }
@@ -571,7 +583,7 @@ namespace Graph
                     {
                         e.Graphics.FillEllipse(VertexBrush, vertex.x - _VertexSize / 2, vertex.y - _VertexSize / 2, _VertexSize, _VertexSize);
                     }
-                    RectangleF Rect = new RectangleF(vertex.x - _VertexSize / 2, vertex.y - _VertexSize / 2, _VertexSize*3, _VertexSize);
+                    RectangleF Rect = new RectangleF(vertex.x - _VertexSize, vertex.y - _VertexSize / 2, _VertexSize*2, _VertexSize);
                     String S = vertex.name;
                     e.Graphics.DrawString(S, font, TextBrush, Rect, Fmt);
                 }
