@@ -11,6 +11,34 @@ namespace Graph
 {
     public class GraphEditor : Control
     {
+        /// <summary>
+        /// Конструктор компонента
+        /// </summary>
+        public GraphEditor() : base()
+        {
+            BackColor = Color.AliceBlue;
+            _VertexColor = Color.Black; EdgeColor = Color.Gray;
+            _TextColor = Color.Red;
+            _ShortestPathColor = Color.Green;
+            _DarkColor = Color.DarkGray;
+            _LightColor = Color.Gray;
+            _graph = new MyGraph();
+            _VertexCount = 0;
+            _SoundsOn = true;
+            vertexCoordinates = new List<VertexCoordinatesEdge>();
+            edgeCoordinates = new List<EdgeCoordinates>();
+            InitSounds();
+        }
+
+        private MyGraph _graph;
+        private GraphShortestPath _shortestPath;
+        protected List<VertexCoordinatesEdge> vertexCoordinates;
+        protected List<EdgeCoordinates> edgeCoordinates;
+        private System.Media.SoundPlayer addVertexOrEdge;
+        private System.Media.SoundPlayer changeState;
+        private System.Media.SoundPlayer findAction;
+        private System.Media.SoundPlayer prohibitionOfAction;
+        private System.Media.SoundPlayer resetAction;
 
         protected Color _VertexColor;
         protected Color _EdgeColor;
@@ -20,14 +48,16 @@ namespace Graph
         protected Color _ShortestPathColor;
         protected int _VertexSize;
         protected int _VertexCount;
+        private ObjStates _ObjState;
+        protected bool _IsVertexAddMode;
+        protected bool _SoundsOn;
+        protected bool _IsEdgeAddMode;
         public enum ObjStates
         {
             osConvex,
             osConcavity
         }
-        private ObjStates _ObjState;
-        protected bool _IsVertexAddMode;
-        protected bool _IsEdgeAddMode;
+
         public virtual bool IsVertexAddMode
         {
             get { return _IsVertexAddMode; }
@@ -49,6 +79,18 @@ namespace Graph
                 }
         }
 
+        public virtual bool SoundsOn
+        {
+            get { return _SoundsOn; }
+            set
+            {
+                if (_SoundsOn != value)
+                {
+                    _SoundsOn = value;
+                }
+            }
+        }
+
         public virtual ObjStates ObjState
         {
             get
@@ -64,18 +106,6 @@ namespace Graph
                 }
 
             }
-        }
-        public GraphEditor() : base()
-        { 
-            BackColor = Color.AliceBlue;
-            _VertexColor = Color.Black; EdgeColor = Color.Gray;
-            _TextColor = Color.Red;
-            _ShortestPathColor = Color.Green;
-            _DarkColor = Color.DarkGray;
-            _LightColor = Color.Gray;
-            _graph = new MyGraph();
-            _VertexCount = 0;
-            InitSounds();
         }
      
         public Color VertexColor
@@ -174,16 +204,9 @@ namespace Graph
             }
         }
 
-        private MyGraph _graph;
-        private GraphShortestPath _shortestPath;
-        protected List<VertexCoordinatesEdge> vertexCoordinates = new List<VertexCoordinatesEdge>();
-        protected List<EdgeCoordinates> edgeCoordinates = new List<EdgeCoordinates>();
-        private System.Media.SoundPlayer addVertexOrEdge;
-        private System.Media.SoundPlayer changeState;
-        private System.Media.SoundPlayer findAction;
-        private System.Media.SoundPlayer prohibitionOfAction;
-        private System.Media.SoundPlayer resetAction;
-
+        /// <summary>
+        /// Метод инициализации звуков
+        /// </summary>
         private void InitSounds()
         {
            var exePath = Environment.CurrentDirectory;
@@ -194,6 +217,9 @@ namespace Graph
             resetAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "reset.wav"));
         }
 
+        /// <summary>
+        /// Метод сброса графа
+        /// </summary>
         public void Reset()
         {
             _graph = new MyGraph();
@@ -202,17 +228,24 @@ namespace Graph
             edgeCoordinates = new List<EdgeCoordinates>();
             _VertexCount = 0;
             OnResetGraph();
+            if(SoundsOn)
             resetAction.Play();
             Invalidate();
         }
 
+        /// <summary>
+        /// Метод добавления вершины на граф
+        /// </summary>
+        /// <param name="x">x координата вершины</param>
+        /// <param name="y">y координата вершины</param>
         private void addVertex(int x, int y)
         {
             foreach (VertexCoordinatesEdge v in vertexCoordinates)
             {
                 if (((x <= v.x+_VertexSize && x>=v.x-_VertexSize)&&(y<=v.y+_VertexSize && y>=v.y-_VertexSize)))
                 {
-                    prohibitionOfAction.Play();
+                    if (SoundsOn)
+                        prohibitionOfAction.Play();
                     return;
                 }
             }
@@ -221,16 +254,22 @@ namespace Graph
                 _graph.AddVertex(_VertexCount.ToString());
                 OnVertexAdd();
             _IsVertexAddMode = false;
-            addVertexOrEdge.Play();
+            if (SoundsOn)
+                addVertexOrEdge.Play();
             Invalidate();
         }
 
+
+        /// <summary>
+        /// Метод добавления грани на граф
+        /// </summary>
         public void addEdge(string src,string dst,int weight)
         {
             if (_graph.FindVertex(src)!=null && _graph.FindVertex(dst) != null) {
                 foreach(EdgeCoordinates edge in edgeCoordinates)
                 {
-                    prohibitionOfAction.Play();
+                    if (SoundsOn)
+                        prohibitionOfAction.Play();
                     if ((edge.src == src && edge.dst == dst)|| (edge.src == dst && edge.dst == src)) return;
                 }
                 int x1=0;
@@ -244,12 +283,16 @@ namespace Graph
                 }
                 edgeCoordinates.Add(new EdgeCoordinates(x1, x2, y1, y2, src, dst,weight.ToString(),false));
                 _graph.AddEdge(src, dst, weight);
-                addVertexOrEdge.Play();
+                if (SoundsOn)
+                    addVertexOrEdge.Play();
                 OnEdgeAdd();
             }
             Invalidate();
         }
 
+        /// <summary>
+        /// Метод поиска кратчайшего пути в графе
+        /// </summary>
         public string FindShortestPath(string src,string dst)
         {
             ResetShortestPath();
@@ -264,10 +307,14 @@ namespace Graph
                 if (buf != "") buf += ", ";
                 buf+= vertex;
             }
-            if(buf!="") findAction.Play(); else prohibitionOfAction.Play();
+            if (SoundsOn)
+                if (buf!="") findAction.Play(); else prohibitionOfAction.Play();
             return buf;
         }
 
+        /// <summary>
+        /// Метод сброса флагов кратчайшего пути для вершин и граней
+        /// </summary>
         private void ResetShortestPath()
         {
             foreach (var ver in vertexCoordinates)
@@ -280,6 +327,9 @@ namespace Graph
             }
         }
 
+        /// <summary>
+        /// Метод установки флагов кратчайшего пути для вершин и граней
+        /// </summary>
         private void SetShortestPath(List<string> vertices)
         {
             foreach (var vertexName in vertices)
@@ -304,15 +354,22 @@ namespace Graph
             }
         }
 
+        /// <summary>
+        /// Метод смены состояний полотна
+        /// </summary>
         public virtual void State()
         {
             int I = (int)_ObjState + 1;
             I = I > 1 ? 0 : I;
             ObjState = (ObjStates)I;
-            changeState.Play();
+            if (SoundsOn)
+                changeState.Play();
             OnChangeState();
         }
 
+        /// <summary>
+        /// Метод масштабирования полотна
+        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             if (width < 400)
@@ -328,6 +385,9 @@ namespace Graph
             Invalidate();
         }
 
+        /// <summary>
+        /// Метод отрисовки полотна
+        /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
             Brush VertexBrush = new SolidBrush(_VertexColor);
@@ -353,6 +413,11 @@ namespace Graph
             base.OnPaint(e);
         }
 
+        /// <summary>
+        /// Метод отрисовки выпуклостей/вогнутостей
+        /// </summary>
+        /// <param name="DarkPen">Тёмный карандаш</param>
+        /// <param name="LightPen">Светлый карандаш</param>
         private void DrawWindowState(PaintEventArgs e, Pen DarkPen, Pen LightPen)
         {
             for (int i = 0; i < Math.Min(Height, Width) / 15; i++)
@@ -382,6 +447,15 @@ namespace Graph
             }
         }
 
+        /// <summary>
+        /// Метод отрисовки граней
+        /// </summary>
+        /// <param name="e">Графика</param>
+        /// <param name="EdgePen">Карандаш для отрисовки граней</param>
+        /// <param name="ShortestPathPen">Карандаш для отрисовки граней кратчайшего пути</param>
+        /// <param name="font">Шрифт</param>
+        /// <param name="TextBrush">Кисть для отрисовки текста</param>
+        /// <param name="Fmt">Формат строки</param>
         private void DrawEdges(PaintEventArgs e, Pen EdgePen, Pen ShortestPathPen, Font font, SolidBrush TextBrush, StringFormat Fmt)
         {
             Fmt.LineAlignment = StringAlignment.Center;
@@ -451,6 +525,15 @@ namespace Graph
             }
         }
 
+        /// <summary>
+        /// Метод отрисовки граней
+        /// </summary>
+        /// <param name="e">Графика</param>
+        /// <param name="VertexBrush">Кисть для отрисовки вершин</param>
+        /// <param name="ShortestPathBrush">Кисть для отрисовки вершин кратчайшего пути</param>
+        /// <param name="font">Шрифт</param>
+        /// <param name="TextBrush">Кисть для отрисовки текста</param>
+        /// <param name="Fmt">Формат строки</param>
         private void DrawVertices(PaintEventArgs e, Brush VertexBrush, Brush ShortestPathBrush, Font font, SolidBrush TextBrush, StringFormat Fmt)
         {
             Fmt.LineAlignment = StringAlignment.Center;
@@ -495,6 +578,9 @@ namespace Graph
             }
         }
 
+        /// <summary>
+        /// Слушатель нажатия кнопок мыши
+        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             int x = e.X;
@@ -519,6 +605,8 @@ namespace Graph
             }
         }
 
+
+        //События
         protected event EventHandler _OnChangeState;
         protected event EventHandler _OnVertexAdd;
         protected event EventHandler _OnEdgeAdd;

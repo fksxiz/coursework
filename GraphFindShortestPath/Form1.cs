@@ -107,5 +107,17 @@ namespace GraphFindShortestPath
         {
             graphEditor1.Reset();
         }
+
+        private void SoundsButton_Click(object sender, EventArgs e)
+        {
+            if (graphEditor1.SoundsOn)
+            {
+                graphEditor1.SoundsOn = false;
+            }
+            else
+            {
+                graphEditor1.SoundsOn = true;
+            }
+        }
     }
 }
