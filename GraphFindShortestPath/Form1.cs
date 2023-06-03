@@ -65,7 +65,7 @@ namespace GraphFindShortestPath
         {
             if (shortestSrcTextBox.Text != "" && shortestDstTextBox.Text != "")
             {
-                    graphEditor1.FindShortestPath(shortestSrcTextBox.Text, shortestDstTextBox.Text);
+                    pathTextBox.Text = graphEditor1.FindShortestPath(shortestSrcTextBox.Text, shortestDstTextBox.Text);
             }
             else
             {

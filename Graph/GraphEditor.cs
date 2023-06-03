@@ -184,6 +184,7 @@ namespace Graph
             _shortestPath=new GraphShortestPath(_graph);
             vertexCoordinates = new List<VertexCoordinatesEdge>();
             edgeCoordinates = new List<EdgeCoordinates>();
+            _VertexCount = 0;
             OnResetGraph();
             Invalidate();
         }
@@ -201,12 +202,17 @@ namespace Graph
                 vertexCoordinates.Add(new VertexCoordinatesEdge(_VertexCount.ToString(), x, y, false));
                 _graph.AddVertex(_VertexCount.ToString());
                 OnVertexAdd();
+            _IsVertexAddMode = false;
             Invalidate();
         }
 
         public void addEdge(string src,string dst,int weight)
         {
             if (_graph.FindVertex(src)!=null && _graph.FindVertex(dst) != null) {
+                foreach(EdgeCoordinates edge in edgeCoordinates)
+                {
+                    if ((edge.src == src && edge.dst == dst)|| (edge.src == dst && edge.dst == src)) return;
+                }
                 int x1=0;
                 int x2=0;
                 int y1=0;
@@ -223,7 +229,7 @@ namespace Graph
             Invalidate();
         }
 
-        public void FindShortestPath(string src,string dst)
+        public string FindShortestPath(string src,string dst)
         {
             ResetShortestPath();
             _shortestPath = new GraphShortestPath(_graph);
@@ -231,6 +237,13 @@ namespace Graph
             SetShortestPath(vertices);
             if(vertices.Count>0) OnFindShortestPath();
             Invalidate();
+            string buf = "";
+            foreach (string vertex in vertices)
+            {
+                if (buf != "") buf += ", ";
+                buf+= vertex;
+            }
+            return buf;
         }
 
         private void ResetShortestPath()
@@ -261,7 +274,7 @@ namespace Graph
             {
                 foreach (var e in edgeCoordinates)
                 {
-                    if (e.src == vertices[i] && e.dst == vertices[i + 1])
+                    if ((e.src == vertices[i] && e.dst == vertices[i + 1])||(e.dst == vertices[i] && e.src == vertices[i + 1]))
                     {
                         e.isShortestPath = true;
                     }
@@ -296,8 +309,8 @@ namespace Graph
         {
             Brush VertexBrush = new SolidBrush(_VertexColor);
             Brush ShortestPathBrush = new SolidBrush(_ShortestPathColor);
-            Pen ShortestPathPen = new Pen(_ShortestPathColor);
-            Pen EdgePen = new Pen(_EdgeColor);
+            Pen ShortestPathPen = new Pen(_ShortestPathColor,5);
+            Pen EdgePen = new Pen(_EdgeColor,5);
             Pen LightPen = new Pen(_LightColor);
             Pen DarkPen = new Pen(_DarkColor);
             int FontSize = (int)Math.Round((_VertexSize - 16) * 120 / e.Graphics.DpiY);
@@ -309,7 +322,17 @@ namespace Graph
             SolidBrush TextBrush = new SolidBrush(_TextColor);
             StringFormat Fmt = new StringFormat();
             Fmt.LineAlignment = StringAlignment.Center;
-            for (int i = 0; i < Math.Min(Height,Width) / 15; i++)
+            Fmt.Alignment = StringAlignment.Center;
+            DrawWindowState(e, DarkPen, LightPen);
+            DrawEdges(e,EdgePen,ShortestPathPen,font,TextBrush,Fmt);
+            DrawVertices(e, VertexBrush, ShortestPathBrush, font, TextBrush, Fmt);
+
+            base.OnPaint(e);
+        }
+
+        private void DrawWindowState(PaintEventArgs e, Pen DarkPen, Pen LightPen)
+        {
+            for (int i = 0; i < Math.Min(Height, Width) / 15; i++)
             {
                 Point[] D =
                     {
@@ -334,10 +357,6 @@ namespace Graph
                     e.Graphics.DrawLines(LightPen, D);
                 }
             }
-            DrawEdges(e,EdgePen,ShortestPathPen,font,TextBrush,Fmt);
-            DrawVertices(e, VertexBrush, ShortestPathBrush, font, TextBrush, Fmt);
-
-            base.OnPaint(e);
         }
 
         private void DrawEdges(PaintEventArgs e, Pen EdgePen, Pen ShortestPathPen, Font font, SolidBrush TextBrush, StringFormat Fmt)
@@ -402,7 +421,7 @@ namespace Graph
                     }
                     int x = (Math.Min(edge.x2, edge.x1) - _VertexSize) + ((Math.Max(edge.x2, edge.x1) - _VertexSize) - (Math.Min(edge.x1, edge.x2) - _VertexSize)) / 2;
                     int y = (Math.Min(edge.y2, edge.y1) - _VertexSize / 2) + ((Math.Max(edge.y2, edge.y1) - _VertexSize / 2) - (Math.Min(edge.y1, edge.y2) - _VertexSize / 2)) / 2;
-                    RectangleF Rect = new RectangleF(x, y, _VertexSize * 2, _VertexSize);
+                    RectangleF Rect = new RectangleF(x, y, _VertexSize * 3, _VertexSize);
                     String S = edge.weight;
                     e.Graphics.DrawString(S, font, TextBrush, Rect, Fmt);
                 }
@@ -446,7 +465,7 @@ namespace Graph
                     {
                         e.Graphics.FillEllipse(VertexBrush, vertex.x - _VertexSize / 2, vertex.y - _VertexSize / 2, _VertexSize, _VertexSize);
                     }
-                    RectangleF Rect = new RectangleF(vertex.x - _VertexSize / 2, vertex.y - _VertexSize / 2, _VertexSize, _VertexSize);
+                    RectangleF Rect = new RectangleF(vertex.x - _VertexSize / 2, vertex.y - _VertexSize / 2, _VertexSize*3, _VertexSize);
                     String S = vertex.name;
                     e.Graphics.DrawString(S, font, TextBrush, Rect, Fmt);
                 }
@@ -462,7 +481,6 @@ namespace Graph
                 if (_IsVertexAddMode)
                 {
                     addVertex(x,y);
-                    _IsVertexAddMode = false;
                 }
                 base.OnMouseDown(e);
             }

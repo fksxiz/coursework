@@ -45,6 +45,8 @@
             this.EventsListBox = new System.Windows.Forms.ListBox();
             this.ResetButton = new System.Windows.Forms.Button();
             this.graphEditor1 = new Graph.GraphEditor();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pathTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // AddVertexButton
@@ -71,21 +73,21 @@
             // 
             this.srcTextBox.Location = new System.Drawing.Point(98, 99);
             this.srcTextBox.Name = "srcTextBox";
-            this.srcTextBox.Size = new System.Drawing.Size(161, 20);
+            this.srcTextBox.Size = new System.Drawing.Size(159, 20);
             this.srcTextBox.TabIndex = 7;
             // 
             // weightTextBox
             // 
             this.weightTextBox.Location = new System.Drawing.Point(98, 151);
             this.weightTextBox.Name = "weightTextBox";
-            this.weightTextBox.Size = new System.Drawing.Size(161, 20);
+            this.weightTextBox.Size = new System.Drawing.Size(159, 20);
             this.weightTextBox.TabIndex = 8;
             // 
             // dstTextBox
             // 
             this.dstTextBox.Location = new System.Drawing.Point(98, 125);
             this.dstTextBox.Name = "dstTextBox";
-            this.dstTextBox.Size = new System.Drawing.Size(161, 20);
+            this.dstTextBox.Size = new System.Drawing.Size(159, 20);
             this.dstTextBox.TabIndex = 9;
             // 
             // label2
@@ -147,14 +149,14 @@
             // 
             this.shortestDstTextBox.Location = new System.Drawing.Point(97, 232);
             this.shortestDstTextBox.Name = "shortestDstTextBox";
-            this.shortestDstTextBox.Size = new System.Drawing.Size(161, 20);
+            this.shortestDstTextBox.Size = new System.Drawing.Size(160, 20);
             this.shortestDstTextBox.TabIndex = 15;
             // 
             // shortestSrcTextBox
             // 
             this.shortestSrcTextBox.Location = new System.Drawing.Point(97, 206);
             this.shortestSrcTextBox.Name = "shortestSrcTextBox";
-            this.shortestSrcTextBox.Size = new System.Drawing.Size(161, 20);
+            this.shortestSrcTextBox.Size = new System.Drawing.Size(160, 20);
             this.shortestSrcTextBox.TabIndex = 14;
             // 
             // stateButton
@@ -172,16 +174,16 @@
             this.EventsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.EventsListBox.FormattingEnabled = true;
-            this.EventsListBox.Location = new System.Drawing.Point(12, 297);
+            this.EventsListBox.Location = new System.Drawing.Point(12, 323);
             this.EventsListBox.Name = "EventsListBox";
-            this.EventsListBox.Size = new System.Drawing.Size(245, 134);
+            this.EventsListBox.Size = new System.Drawing.Size(245, 108);
             this.EventsListBox.TabIndex = 20;
             // 
             // ResetButton
             // 
             this.ResetButton.BackColor = System.Drawing.Color.Red;
             this.ResetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ResetButton.Location = new System.Drawing.Point(12, 263);
+            this.ResetButton.Location = new System.Drawing.Point(12, 294);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(245, 23);
             this.ResetButton.TabIndex = 21;
@@ -215,11 +217,29 @@
             this.graphEditor1.FindedShortestPath += new System.EventHandler(this.graphEditor1_FindedShortestPath);
             this.graphEditor1.ResetGraph += new System.EventHandler(this.graphEditor1_ResetGraph);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(63, 261);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 13);
+            this.label1.TabIndex = 22;
+            this.label1.Text = "path";
+            // 
+            // pathTextBox
+            // 
+            this.pathTextBox.Location = new System.Drawing.Point(97, 258);
+            this.pathTextBox.Name = "pathTextBox";
+            this.pathTextBox.Size = new System.Drawing.Size(160, 20);
+            this.pathTextBox.TabIndex = 23;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.pathTextBox);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.ResetButton);
             this.Controls.Add(this.EventsListBox);
             this.Controls.Add(this.graphEditor1);
@@ -263,6 +283,8 @@
         private Graph.GraphEditor graphEditor1;
         private System.Windows.Forms.ListBox EventsListBox;
         private System.Windows.Forms.Button ResetButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox pathTextBox;
     }
 }
 
