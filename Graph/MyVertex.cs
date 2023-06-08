@@ -43,9 +43,25 @@ namespace Graph
             edges.Add(edge);
         }
 
-        public void AddEdge(MyVertex vertex, int wieght)
+        public void AddEdge(MyVertex vertex, int weight)
         {
-            edges.Add(new MyEdge(vertex,wieght));
+            edges.Add(new MyEdge(vertex, weight));
+        }
+
+        public void RemoveEdge(MyEdge edge)
+        {
+            edges.Remove(edge);
+        }
+
+        public void RemoveEdge(MyVertex vertex)
+        {
+            foreach(MyEdge edge in edges)
+            {
+                if(edge.connectedVertex == vertex)
+                {
+                    edges.Remove(edge);
+                }
+            }
         }
 
         public override string ToString()

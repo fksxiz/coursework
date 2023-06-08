@@ -47,5 +47,24 @@ namespace Graph
                 d.AddEdge(s, weight);
             }
         }
+
+        public void RemoveEdge(string src, string dst)
+        {
+            var s = FindVertex(src);
+            var d = FindVertex(dst);
+            if(s!=null && d != null)
+            {
+                s.RemoveEdge(d);
+                d.RemoveEdge(s);
+            }
+            if (dst == "")
+            {
+                foreach (MyVertex vertex in Vertices)
+                {
+                    vertex.RemoveEdge(s);
+                    s.RemoveEdge(vertex);
+                }
+            }
+        }
     }
 }

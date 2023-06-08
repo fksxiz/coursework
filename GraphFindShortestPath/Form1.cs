@@ -36,14 +36,17 @@ namespace GraphFindShortestPath
         {
 
         }
-
+        private object locker=new object();
         private void button2_Click(object sender, EventArgs e)
         {
             if (srcTextBox.Text != ""&& dstTextBox.Text != ""&& weightTextBox.Text != "")
             {
                 try
                 {
-                graphEditor1.addEdge(srcTextBox.Text, dstTextBox.Text, int.Parse(weightTextBox.Text));
+                    lock (locker)
+                    {
+                        graphEditor1.addEdge(srcTextBox.Text, dstTextBox.Text, int.Parse(weightTextBox.Text));
+                    }
                 }
                 catch
                 {
@@ -117,6 +120,44 @@ namespace GraphFindShortestPath
             else
             {
                 graphEditor1.SoundsOn = true;
+            }
+        }
+
+        private void RemoveEdgeButton_Click(object sender, EventArgs e)
+        {
+            if (srcTextBox.Text != "" && dstTextBox.Text != "" && weightTextBox.Text != "")
+            {
+                for (int i=0;i<5;i++) {
+                    try
+                    {
+                        graphEditor1.removeEdge(srcTextBox.Text, dstTextBox.Text);
+                    }
+                    catch { }
+               }
+            }
+            else
+            {
+                MessageBox.Show("Заполните все поля.", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void RemoveVertexButton_Click(object sender, EventArgs e)
+        {
+            if (srcTextBox.Text != "")
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    try
+                    {
+                        graphEditor1.removeVertex(srcTextBox.Text);
+                    }
+                    catch { }
+                }
+                
+            }
+            else
+            {
+                MessageBox.Show("Заполните все поля.", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

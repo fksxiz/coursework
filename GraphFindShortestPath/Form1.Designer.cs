@@ -47,6 +47,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pathTextBox = new System.Windows.Forms.TextBox();
             this.SoundsButton = new System.Windows.Forms.Button();
+            this.RemoveEdgeButton = new System.Windows.Forms.Button();
+            this.RemoveVertexButton = new System.Windows.Forms.Button();
             this.graphEditor1 = new Graph.GraphEditor();
             this.SuspendLayout();
             // 
@@ -64,7 +66,7 @@
             // 
             this.addEdgeButton.Location = new System.Drawing.Point(14, 70);
             this.addEdgeButton.Name = "addEdgeButton";
-            this.addEdgeButton.Size = new System.Drawing.Size(245, 23);
+            this.addEdgeButton.Size = new System.Drawing.Size(63, 23);
             this.addEdgeButton.TabIndex = 2;
             this.addEdgeButton.Text = "Add Edge";
             this.addEdgeButton.UseVisualStyleBackColor = true;
@@ -219,24 +221,41 @@
             this.SoundsButton.UseVisualStyleBackColor = true;
             this.SoundsButton.Click += new System.EventHandler(this.SoundsButton_Click);
             // 
+            // RemoveEdgeButton
+            // 
+            this.RemoveEdgeButton.Location = new System.Drawing.Point(83, 70);
+            this.RemoveEdgeButton.Name = "RemoveEdgeButton";
+            this.RemoveEdgeButton.Size = new System.Drawing.Size(84, 23);
+            this.RemoveEdgeButton.TabIndex = 25;
+            this.RemoveEdgeButton.Text = "Remove Edge";
+            this.RemoveEdgeButton.UseVisualStyleBackColor = true;
+            this.RemoveEdgeButton.Click += new System.EventHandler(this.RemoveEdgeButton_Click);
+            // 
+            // RemoveVertexButton
+            // 
+            this.RemoveVertexButton.Location = new System.Drawing.Point(173, 70);
+            this.RemoveVertexButton.Name = "RemoveVertexButton";
+            this.RemoveVertexButton.Size = new System.Drawing.Size(84, 23);
+            this.RemoveVertexButton.TabIndex = 27;
+            this.RemoveVertexButton.Text = "Remove ver";
+            this.RemoveVertexButton.UseVisualStyleBackColor = true;
+            this.RemoveVertexButton.Click += new System.EventHandler(this.RemoveVertexButton_Click);
+            // 
             // graphEditor1
             // 
-            this.graphEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.graphEditor1.BackColor = System.Drawing.Color.Silver;
+            this.graphEditor1.BackColor = System.Drawing.Color.AliceBlue;
             this.graphEditor1.DarkColor = System.Drawing.Color.DarkGray;
             this.graphEditor1.EdgeColor = System.Drawing.Color.Gray;
             this.graphEditor1.IsEdgeAddMode = false;
             this.graphEditor1.IsVertexAddMode = false;
             this.graphEditor1.LightColor = System.Drawing.Color.Gray;
-            this.graphEditor1.Location = new System.Drawing.Point(263, 12);
+            this.graphEditor1.Location = new System.Drawing.Point(264, 12);
             this.graphEditor1.Name = "graphEditor1";
-            this.graphEditor1.ObjState = Graph.GraphEditor.ObjStates.osConcavity;
+            this.graphEditor1.ObjState = Graph.GraphEditor.ObjStates.osConvex;
             this.graphEditor1.ShortestPathColor = System.Drawing.Color.Green;
-            this.graphEditor1.Size = new System.Drawing.Size(525, 419);
+            this.graphEditor1.Size = new System.Drawing.Size(524, 419);
             this.graphEditor1.SoundsOn = true;
-            this.graphEditor1.TabIndex = 19;
+            this.graphEditor1.TabIndex = 28;
             this.graphEditor1.Text = "graphEditor1";
             this.graphEditor1.TextColor = System.Drawing.Color.Red;
             this.graphEditor1.VertexColor = System.Drawing.Color.Black;
@@ -251,12 +270,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.graphEditor1);
+            this.Controls.Add(this.RemoveVertexButton);
+            this.Controls.Add(this.RemoveEdgeButton);
             this.Controls.Add(this.SoundsButton);
             this.Controls.Add(this.pathTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ResetButton);
             this.Controls.Add(this.EventsListBox);
-            this.Controls.Add(this.graphEditor1);
             this.Controls.Add(this.stateButton);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
@@ -294,12 +315,14 @@
         private System.Windows.Forms.TextBox shortestDstTextBox;
         private System.Windows.Forms.TextBox shortestSrcTextBox;
         private System.Windows.Forms.Button stateButton;
-        private Graph.GraphEditor graphEditor1;
         private System.Windows.Forms.ListBox EventsListBox;
         private System.Windows.Forms.Button ResetButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox pathTextBox;
         private System.Windows.Forms.Button SoundsButton;
+        private System.Windows.Forms.Button RemoveEdgeButton;
+        private System.Windows.Forms.Button RemoveVertexButton;
+        private Graph.GraphEditor graphEditor1;
     }
 }
 

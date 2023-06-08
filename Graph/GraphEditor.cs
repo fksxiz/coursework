@@ -268,9 +268,8 @@ namespace Graph
             Invalidate();
         }
 
-
         /// <summary>
-        /// Метод добавления грани на граф
+        /// Метод добавления грани с графа
         /// </summary>
         public virtual void addEdge(string src, string dst, int weight)
         {
@@ -281,27 +280,110 @@ namespace Graph
             }
             if (_graph.FindVertex(src) != null && _graph.FindVertex(dst) != null)
             {
+                lock (edgeCoordinates)
+                {
+                    {
+                        foreach (EdgeCoordinates edge in edgeCoordinates)
+                        {
+
+                            if ((edge.src == src && edge.dst == dst) || (edge.src == dst && edge.dst == src))
+                            {
+                                if (SoundsOn)
+                                    prohibitionOfAction.Play();
+                                return;
+                            }
+                        }
+                    }
+                    int x1 = 0;
+                    int x2 = 0;
+                    int y1 = 0;
+                    int y2 = 0;
+                    foreach (VertexCoordinatesEdge vertex in vertexCoordinates)
+                    {
+                        if (vertex.name == src) { x1 = vertex.x; y1 = vertex.y; }
+                        if (vertex.name == dst) { x2 = vertex.x; y2 = vertex.y; }
+                    }
+                    edgeCoordinates.Add(new EdgeCoordinates(x1, x2, y1, y2, src, dst, weight.ToString(), false));
+                    _graph.AddEdge(src, dst, weight);
+                    if (SoundsOn)
+                        addVertexOrEdge.Play();
+                    OnEdgeAdd();
+                }
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Метод удаления грани на граф
+        /// </summary>
+        public virtual void removeEdge(string src, string dst)
+        {
+            if (src == dst)
+            {
+                if (SoundsOn) prohibitionOfAction.Play();
+                return;
+            }
+            if (_graph.FindVertex(src) != null && _graph.FindVertex(dst) != null)
+            {
+                    EdgeCoordinates buf = null;
+                    foreach (EdgeCoordinates edge in edgeCoordinates)
+                    {
+                        if ((edge.src == src && edge.dst == dst) || (edge.src == dst && edge.dst == src))
+                        {
+                        buf = edge;
+                            if (SoundsOn)
+                                resetAction.Play();
+                        }
+                    break;
+                    }
+                edgeCoordinates.Remove(buf);
+                _graph.RemoveEdge(src, dst);
+            }
+            ResetShortestPath();
+            Invalidate();
+        }
+
+        protected virtual void removeEdgesForVertex(string src)
+        {
+            if (_graph.FindVertex(src) != null)
+            {
+                var buf = edgeCoordinates;
                 foreach (EdgeCoordinates edge in edgeCoordinates)
                 {
-                    if (SoundsOn)
-                        prohibitionOfAction.Play();
-                    if ((edge.src == src && edge.dst == dst) || (edge.src == dst && edge.dst == src)) return;
+                    if (edge.src == src || edge.dst == src)
+                    {
+                        buf.Remove(edge);
+                    }
                 }
-                int x1 = 0;
-                int x2 = 0;
-                int y1 = 0;
-                int y2 = 0;
-                foreach (VertexCoordinatesEdge vertex in vertexCoordinates)
-                {
-                    if (vertex.name == src) { x1 = vertex.x; y1 = vertex.y; }
-                    if (vertex.name == dst) { x2 = vertex.x; y2 = vertex.y; }
-                }
-                edgeCoordinates.Add(new EdgeCoordinates(x1, x2, y1, y2, src, dst, weight.ToString(), false));
-                _graph.AddEdge(src, dst, weight);
-                if (SoundsOn)
-                    addVertexOrEdge.Play();
-                OnEdgeAdd();
+                edgeCoordinates=buf;
+                _graph.RemoveEdge(src, "");
             }
+            Invalidate();
+        }
+
+        public virtual void removeVertex(string vertexName)
+        {
+            removeEdgesForVertex(vertexName);
+            var vertex=_graph.FindVertex(vertexName);
+            if (vertex == null)
+            {
+                if (SoundsOn)
+                    prohibitionOfAction.Play();
+                return;
+            }
+            VertexCoordinatesEdge ver=null;
+            foreach (VertexCoordinatesEdge v in vertexCoordinates)
+            {
+                if (v.name==vertexName)
+                {
+                    ver = v; break;
+                }
+            }
+            vertexCoordinates.Remove(ver);
+            _graph.RemoveVertex(vertex);
+            if (SoundsOn)
+                resetAction.Play();
+            ResetShortestPath() ;
             Invalidate();
         }
 
@@ -332,13 +414,19 @@ namespace Graph
         /// </summary>
         protected virtual void ResetShortestPath()
         {
-            foreach (var ver in vertexCoordinates)
+            lock (vertexCoordinates)
             {
-                ver.isShortestPath = false;
+                foreach (var ver in vertexCoordinates)
+                {
+                    ver.isShortestPath = false;
+                }
             }
-            foreach (var e in edgeCoordinates)
+            lock (edgeCoordinates)
             {
-                e.isShortestPath = false;
+                foreach (var e in edgeCoordinates)
+                {
+                    e.isShortestPath = false;
+                }
             }
         }
 
@@ -367,6 +455,7 @@ namespace Graph
                     }
                 }
             }
+            Invalidate();
         }
 
         /// <summary>
