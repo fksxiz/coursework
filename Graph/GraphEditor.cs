@@ -33,6 +33,7 @@ namespace Graph
             InitSounds();
         }
 
+        //внутренние переменные
         private MyGraph _graph;
         private GraphShortestPath _shortestPath;
         private List<VertexCoordinatesEdge> vertexCoordinates;
@@ -45,6 +46,7 @@ namespace Graph
         private int _selectedVertex = -1;
         private int startNodeIndex = -1;
 
+        //свойства
         protected Color _VertexColor;
         protected Color _EdgeColor;
         protected Color _TextColor;
@@ -352,18 +354,18 @@ namespace Graph
             if (src != null && dst != null)
             {
                     EdgeCoordinates buf = null;
-                    for(int i= 0;i<edgeCoordinates.Count;i++)
+                    for(int i= 0;i<=edgeCoordinates.Count;i++)
                     {
                     EdgeCoordinates edge = edgeCoordinates[i];
                         if ((edge.src == src && edge.dst == dst) || (edge.src == dst && edge.dst == src))
                         {
-                        buf = edge;
+                        edgeCoordinates.RemoveAt(i);
                             if (SoundsOn)
                                 resetAction.Play();
-                        }
-                    break;
+                        break;
                     }
-                edgeCoordinates.Remove(buf);
+                    }
+                //edgeCoordinates.Remove(buf);
                 Invalidate();
                 _graph.RemoveEdge(src, dst);
             }
