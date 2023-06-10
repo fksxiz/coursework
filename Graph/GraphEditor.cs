@@ -321,8 +321,9 @@ namespace Graph
                     }
                 }
                 //edgeCoordinates.Remove(buf);
-                Invalidate();
+                ResetShortestPath();
                 _graph.RemoveEdge(src, dst);
+                Invalidate();
             }
         }
 
