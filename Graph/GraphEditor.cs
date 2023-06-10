@@ -549,7 +549,7 @@ namespace Graph
             {
                 FontSize = 12;
             }
-            Font font = new Font("Arial", FontSize);
+            Font font = new Font("Arial", FontSize, FontStyle.Bold);
             SolidBrush TextBrush = new SolidBrush(_TextColor);
             StringFormat Fmt = new StringFormat();
             Fmt.LineAlignment = StringAlignment.Center;
@@ -754,8 +754,9 @@ namespace Graph
                         }
                     }
                 }
-                base.OnMouseDown(e);
             }
+            
+            base.OnMouseDown(e);
             Invalidate();
         }
 
