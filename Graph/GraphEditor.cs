@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Microsoft.VisualBasic;
 
 namespace Graph
 {
@@ -33,13 +35,15 @@ namespace Graph
 
         private MyGraph _graph;
         private GraphShortestPath _shortestPath;
-        protected List<VertexCoordinatesEdge> vertexCoordinates;
-        protected List<EdgeCoordinates> edgeCoordinates;
+        private List<VertexCoordinatesEdge> vertexCoordinates;
+        private List<EdgeCoordinates> edgeCoordinates;
         private System.Media.SoundPlayer addVertexOrEdge;
         private System.Media.SoundPlayer changeState;
         private System.Media.SoundPlayer findAction;
         private System.Media.SoundPlayer prohibitionOfAction;
         private System.Media.SoundPlayer resetAction;
+        private int _selectedVertex = -1;
+        private int startNodeIndex = -1;
 
         protected Color _VertexColor;
         protected Color _EdgeColor;
@@ -53,6 +57,8 @@ namespace Graph
         protected bool _IsVertexAddMode;
         protected bool _SoundsOn;
         protected bool _IsEdgeAddMode;
+        protected bool _IsDeleteMode;
+
         public enum ObjStates
         {
             osConvex,
@@ -67,6 +73,8 @@ namespace Graph
                 if (_IsVertexAddMode != value)
                 {
                     _IsVertexAddMode = value;
+                    _IsEdgeAddMode = false;
+                    _IsDeleteMode = false;
                 }
             }
         }
@@ -78,6 +86,22 @@ namespace Graph
                 if (_IsEdgeAddMode != value)
                 {
                     _IsEdgeAddMode = value;
+                    _IsVertexAddMode = false;
+                    _IsDeleteMode = false;
+                }
+            }
+        }
+
+        public virtual bool IsDeleteMode
+        {
+            get { return _IsDeleteMode; }
+            set
+            {
+                if (_IsDeleteMode != value)
+                {
+                    _IsDeleteMode = value;
+                    _IsVertexAddMode = false;
+                    _IsEdgeAddMode = false;
                 }
             }
         }
@@ -262,7 +286,7 @@ namespace Graph
             vertexCoordinates.Add(new VertexCoordinatesEdge(_VertexCount.ToString(), x, y, false));
             _graph.AddVertex(_VertexCount.ToString());
             OnVertexAdd();
-            _IsVertexAddMode = false;
+            //_IsVertexAddMode = false;
             if (SoundsOn)
                 addVertexOrEdge.Play();
             Invalidate();
@@ -315,6 +339,8 @@ namespace Graph
 
         /// <summary>
         /// Метод удаления грани на граф
+        /// <param name="src">имя первой вершины</param>
+        /// <param name="dst">имя второй вершины</param>
         /// </summary>
         public virtual void removeEdge(string src, string dst)
         {
@@ -323,11 +349,12 @@ namespace Graph
                 if (SoundsOn) prohibitionOfAction.Play();
                 return;
             }
-            if (_graph.FindVertex(src) != null && _graph.FindVertex(dst) != null)
+            if (src != null && dst != null)
             {
                     EdgeCoordinates buf = null;
-                    foreach (EdgeCoordinates edge in edgeCoordinates)
+                    for(int i= 0;i<edgeCoordinates.Count;i++)
                     {
+                    EdgeCoordinates edge = edgeCoordinates[i];
                         if ((edge.src == src && edge.dst == dst) || (edge.src == dst && edge.dst == src))
                         {
                         buf = edge;
@@ -337,30 +364,43 @@ namespace Graph
                     break;
                     }
                 edgeCoordinates.Remove(buf);
+                Invalidate();
                 _graph.RemoveEdge(src, dst);
             }
-            ResetShortestPath();
-            Invalidate();
         }
 
+        /// <summary>
+        /// Метод удаления всех граней для вершины
+        /// <param name="src">имя вершины</param>
+        /// </summary>
         protected virtual void removeEdgesForVertex(string src)
         {
             if (_graph.FindVertex(src) != null)
             {
-                var buf = edgeCoordinates;
-                foreach (EdgeCoordinates edge in edgeCoordinates)
+                for (int i = 0; i <= _graph.FindVertex(src).edges.Count; i++)
                 {
-                    if (edge.src == src || edge.dst == src)
+                    try
                     {
-                        buf.Remove(edge);
-                    }
+                        var buf = edgeCoordinates;
+                        foreach (EdgeCoordinates edge in edgeCoordinates)
+                        {
+                            if (edge.src == src || edge.dst == src)
+                            {
+                                buf.Remove(edge);
+                            }
+                        }
+                        edgeCoordinates = buf;
+                        Invalidate();
+                        _graph.RemoveEdge(src, "");
+                    }catch (Exception e) { }
                 }
-                edgeCoordinates=buf;
-                _graph.RemoveEdge(src, "");
             }
-            Invalidate();
         }
 
+        /// <summary>
+        /// Метод удаления вершины с графа
+        /// <param name="vertexName">имя вершины</param>
+        /// </summary>
         public virtual void removeVertex(string vertexName)
         {
             removeEdgesForVertex(vertexName);
@@ -696,9 +736,151 @@ namespace Graph
                 {
                     addVertex(x, y);
                 }
+                else
+                {
+                    if (_IsEdgeAddMode)
+                    {
+                        edgeAddByMouse(e);
+                    }
+                    else
+                    {
+                        if (_IsDeleteMode)
+                        {
+                            deleteMode(e);
+                        }
+                    }
+                }
                 base.OnMouseDown(e);
             }
             Invalidate();
+        }
+
+        //Метод удаления ребра или вершины мышкой
+        private void deleteMode(MouseEventArgs e)
+        {
+            // Проверяем, попали ли мы в какой-либо элемент (вершину или ребро)
+            for (int i = 0; i < vertexCoordinates.Count; i++)
+            {
+                Rectangle nodeBounds = new Rectangle(vertexCoordinates[i].x - 10, vertexCoordinates[i].y - 10, 20, 20);
+                if (nodeBounds.Contains(e.Location))
+                {
+                    // Подсвечиваем выбранный элемент
+                    _selectedVertex = i;
+                    Invalidate(); // Перерисовываем компонент
+
+                    // Отображаем предупреждение об удалении
+                    DialogResult result = MessageBox.Show("Вы уверены, что хотите удалить эту вершину и связанные с ней ребра?", "Подтверждение удаления", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        // Удаляем вершину и связанные ребра
+                        removeVertex(vertexCoordinates[i].name);
+                    }
+                    return;
+                }
+            }
+
+            // Проверяем, попали ли мы в какое-либо ребро
+            for (int i = 0; i < edgeCoordinates.Count; i++)
+            {
+                Tuple<Point, Point> edge;  
+                if (IsPointOnEdge(e.Location, edgeCoordinates[i].x1, edgeCoordinates[i].y1, edgeCoordinates[i].x2, edgeCoordinates[i].y2))
+                {
+                    // Отображаем предупреждение об удалении
+                    DialogResult result = MessageBox.Show("Вы уверены, что хотите удалить это ребро?", "Подтверждение удаления", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        // Удаляем ребро
+                        removeEdge(edgeCoordinates[i].src, edgeCoordinates[i].dst);
+                    }
+                    return;
+                }
+            }
+        }
+
+        // Метод для проверки, попадает ли точка на ребро
+        private bool IsPointOnEdge(Point point, int x1,int y1, int x2, int y2)
+        {
+            const int tolerance = 3; // Допустимое отклонение от ребра
+
+            float distance = DistancePointToLine(point, x1, y1, x2, y2);
+            return distance <= tolerance;
+        }
+
+        // Метод для вычисления расстояния от точки до линии
+        private float DistancePointToLine(Point point, int x1, int y1, int x2, int y2)
+        {
+            float a = point.X - x1;
+            float b = point.Y - y1;
+            float c = x2 - x1;
+            float d = y2 - y1;
+
+            float dot = a * c + b * d;
+            float lenSq = c * c + d * d;
+            float param = dot / lenSq;
+
+            float xx, yy;
+
+            if (param < 0)
+            {
+                xx = x1;
+                yy = y1;
+            }
+            else if (param > 1)
+            {
+                xx = x2;
+                yy = y2;
+            }
+            else
+            {
+                xx = x1 + param * c;
+                yy = y1 + param * d;
+            }
+
+            float dx = point.X - xx;
+            float dy = point.Y - yy;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        //метод добавления грани мышкой
+        private void edgeAddByMouse(MouseEventArgs e)
+        {
+            // Проверяем, попали ли мы в какую-либо вершину
+            for (int i = 0; i < vertexCoordinates.Count; i++)
+            {
+                Rectangle nodeBounds = new Rectangle(vertexCoordinates[i].x - 10, vertexCoordinates[i].y - 10, 20, 20);
+                if (nodeBounds.Contains(e.Location))
+                {
+                    // Проверяем, является ли это начальной вершиной
+                    if (_selectedVertex == -1)
+                    {
+                        // Выбираем начальную вершину и меняем ее цвет
+                        startNodeIndex = i;
+                        _selectedVertex = i;
+                        Invalidate(); // Перерисовываем компонент
+                    }
+                    else
+                    {
+                        // Создаем ребро между начальной и конечной вершинами
+                        int s = 0;
+                        try
+                        {
+                            s = int.Parse(Interaction.InputBox("Введите вес: "));
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+
+                        addEdge(vertexCoordinates[startNodeIndex].name, vertexCoordinates[i].name, s);
+
+                        // Сбрасываем начальную вершину
+                        startNodeIndex = -1;
+                        _selectedVertex = -1;
+                        Invalidate(); // Перерисовываем компонент
+                    }
+                    return;
+                }
+            }
         }
 
         protected override CreateParams CreateParams

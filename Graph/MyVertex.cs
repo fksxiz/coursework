@@ -60,6 +60,7 @@ namespace Graph
                 if(edge.connectedVertex == vertex)
                 {
                     edges.Remove(edge);
+                    break;
                 }
             }
         }

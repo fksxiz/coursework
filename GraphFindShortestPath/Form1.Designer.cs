@@ -49,16 +49,19 @@
             this.SoundsButton = new System.Windows.Forms.Button();
             this.RemoveEdgeButton = new System.Windows.Forms.Button();
             this.RemoveVertexButton = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.EdgeModeButton = new System.Windows.Forms.Button();
             this.graphEditor1 = new Graph.GraphEditor();
+            this.DeleteModeButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AddVertexButton
             // 
             this.AddVertexButton.Location = new System.Drawing.Point(13, 41);
             this.AddVertexButton.Name = "AddVertexButton";
-            this.AddVertexButton.Size = new System.Drawing.Size(245, 23);
+            this.AddVertexButton.Size = new System.Drawing.Size(79, 23);
             this.AddVertexButton.TabIndex = 0;
-            this.AddVertexButton.Text = "On/Off Add vertex mode";
+            this.AddVertexButton.Text = "vertex mode";
             this.AddVertexButton.UseVisualStyleBackColor = true;
             this.AddVertexButton.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -241,6 +244,16 @@
             this.RemoveVertexButton.UseVisualStyleBackColor = true;
             this.RemoveVertexButton.Click += new System.EventHandler(this.RemoveVertexButton_Click);
             // 
+            // EdgeModeButton
+            // 
+            this.EdgeModeButton.Location = new System.Drawing.Point(98, 41);
+            this.EdgeModeButton.Name = "EdgeModeButton";
+            this.EdgeModeButton.Size = new System.Drawing.Size(74, 23);
+            this.EdgeModeButton.TabIndex = 29;
+            this.EdgeModeButton.Text = "edge mode";
+            this.EdgeModeButton.UseVisualStyleBackColor = true;
+            this.EdgeModeButton.Click += new System.EventHandler(this.EdgeModeButton_Click);
+            // 
             // graphEditor1
             // 
             this.graphEditor1.BackColor = System.Drawing.Color.AliceBlue;
@@ -255,22 +268,29 @@
             this.graphEditor1.ShortestPathColor = System.Drawing.Color.Green;
             this.graphEditor1.Size = new System.Drawing.Size(524, 419);
             this.graphEditor1.SoundsOn = true;
-            this.graphEditor1.TabIndex = 28;
+            this.graphEditor1.TabIndex = 30;
             this.graphEditor1.Text = "graphEditor1";
             this.graphEditor1.TextColor = System.Drawing.Color.Red;
             this.graphEditor1.VertexColor = System.Drawing.Color.Black;
-            this.graphEditor1.ChangeState += new System.EventHandler(this.graphEditor1_ChangeState);
-            this.graphEditor1.VertexAdd += new System.EventHandler(this.graphEditor1_VertexAdd);
-            this.graphEditor1.EdgeAdd += new System.EventHandler(this.graphEditor1_EdgeAdd);
-            this.graphEditor1.FindedShortestPath += new System.EventHandler(this.graphEditor1_FindedShortestPath);
-            this.graphEditor1.ResetGraph += new System.EventHandler(this.graphEditor1_ResetGraph);
+            // 
+            // DeleteModeButton
+            // 
+            this.DeleteModeButton.Location = new System.Drawing.Point(178, 41);
+            this.DeleteModeButton.Name = "DeleteModeButton";
+            this.DeleteModeButton.Size = new System.Drawing.Size(79, 23);
+            this.DeleteModeButton.TabIndex = 31;
+            this.DeleteModeButton.Text = "delete mode";
+            this.DeleteModeButton.UseVisualStyleBackColor = true;
+            this.DeleteModeButton.Click += new System.EventHandler(this.DeleteModeButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.DeleteModeButton);
             this.Controls.Add(this.graphEditor1);
+            this.Controls.Add(this.EdgeModeButton);
             this.Controls.Add(this.RemoveVertexButton);
             this.Controls.Add(this.RemoveEdgeButton);
             this.Controls.Add(this.SoundsButton);
@@ -322,7 +342,10 @@
         private System.Windows.Forms.Button SoundsButton;
         private System.Windows.Forms.Button RemoveEdgeButton;
         private System.Windows.Forms.Button RemoveVertexButton;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button EdgeModeButton;
         private Graph.GraphEditor graphEditor1;
+        private System.Windows.Forms.Button DeleteModeButton;
     }
 }
 

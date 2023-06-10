@@ -8,8 +8,10 @@ namespace Graph
 {
     public class VertexCoordinatesEdge
     {
-        public string name; public int x; public int y;
-        public bool isShortestPath;
+        public string name { get; set; }
+        public int x { get; set; }
+        public int y { get; set; }
+        public bool isShortestPath { get; set; }
 
         public VertexCoordinatesEdge()
         {

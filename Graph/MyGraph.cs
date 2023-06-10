@@ -52,18 +52,28 @@ namespace Graph
         {
             var s = FindVertex(src);
             var d = FindVertex(dst);
-            if(s!=null && d != null)
-            {
-                s.RemoveEdge(d);
-                d.RemoveEdge(s);
-            }
+
             if (dst == "")
             {
                 foreach (MyVertex vertex in Vertices)
                 {
-                    vertex.RemoveEdge(s);
-                    s.RemoveEdge(vertex);
+                    try
+                    {
+                        //s.RemoveEdge(vertex);
+                        vertex.RemoveEdge(s);
+                    }catch (Exception ex) { }
                 }
+            }
+            else
+            {
+            if(s!=null && d != null)
+            {
+                    try
+                    {
+                        s.RemoveEdge(d);
+                        d.RemoveEdge(s);
+                    }catch (Exception e) { }
+            }
             }
         }
     }

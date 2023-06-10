@@ -8,14 +8,14 @@ namespace Graph
 {
     public class EdgeCoordinates
     {
-        public int x1;
-        public int x2;
-        public int y1;
-        public int y2;
-        public string src;
-        public string dst;
-        public string weight;
-        public bool isShortestPath;
+        public int x1 { get; set; }
+        public int x2 { get; set; }
+        public int y1 { get; set; }
+        public int y2 { get; set; }
+        public string src { get; set; }
+        public string dst { get; set; }
+        public string weight { get; set; }
+        public bool isShortestPath { get; set; }
         public EdgeCoordinates(int x1, int x2, int y1, int y2, string src, string dst,string weight, bool isShortestPath)
         {
             this.x1 = x1;

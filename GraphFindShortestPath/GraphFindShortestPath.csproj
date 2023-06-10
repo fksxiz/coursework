@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Graph\Graph.csproj">
-      <Project>{8EA3B317-FE00-4D84-B042-F62F9354D821}</Project>
+      <Project>{8ea3b317-fe00-4d84-b042-f62f9354d821}</Project>
       <Name>Graph</Name>
     </ProjectReference>
   </ItemGroup>

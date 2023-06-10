@@ -127,13 +127,16 @@ namespace GraphFindShortestPath
         {
             if (srcTextBox.Text != "" && dstTextBox.Text != "" && weightTextBox.Text != "")
             {
-                for (int i=0;i<5;i++) {
+                //for (int i=0;i<5;i++) {
                     try
                     {
                         graphEditor1.removeEdge(srcTextBox.Text, dstTextBox.Text);
                     }
-                    catch { }
-               }
+                    catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+               //}
             }
             else
             {
@@ -145,19 +148,43 @@ namespace GraphFindShortestPath
         {
             if (srcTextBox.Text != "")
             {
-                for (int i = 0; i < 7; i++)
-                {
+                //for (int i = 0; i < 7; i++)
+                //{
                     try
                     {
                         graphEditor1.removeVertex(srcTextBox.Text);
                     }
                     catch { }
-                }
+                //}
                 
             }
             else
             {
                 MessageBox.Show("Заполните все поля.", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void EdgeModeButton_Click(object sender, EventArgs e)
+        {
+            if (graphEditor1.IsEdgeAddMode)
+            {
+                graphEditor1.IsEdgeAddMode = false;
+            }
+            else
+            {
+                graphEditor1.IsEdgeAddMode = true;
+            }
+        }
+
+        private void DeleteModeButton_Click(object sender, EventArgs e)
+        {
+            if (graphEditor1.IsDeleteMode)
+            {
+                graphEditor1.IsDeleteMode = false;
+            }
+            else
+            {
+                graphEditor1.IsDeleteMode = true;
             }
         }
     }
