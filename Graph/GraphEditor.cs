@@ -45,6 +45,8 @@ namespace Graph
         private System.Media.SoundPlayer resetAction;
         private int _selectedVertex = -1;
         private int startNodeIndex = -1;
+        protected int _VertexSize;
+        protected int _VertexCount;
 
         //свойства
         protected Color _VertexColor;
@@ -53,8 +55,6 @@ namespace Graph
         protected Color _DarkColor;
         protected Color _LightColor;
         protected Color _ShortestPathColor;
-        protected int _VertexSize;
-        protected int _VertexCount;
         private ObjStates _ObjState;
         protected bool _IsVertexAddMode;
         protected bool _SoundsOn;
@@ -234,19 +234,6 @@ namespace Graph
         }
 
         /// <summary>
-        /// Метод инициализации звуков
-        /// </summary>
-        protected virtual void InitSounds()
-        {
-            var exePath = Environment.CurrentDirectory;
-            addVertexOrEdge = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "addVertexOrEdge.wav"));
-            changeState = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "changeState.wav"));
-            findAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "findAction.wav"));
-            prohibitionOfAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "prohibitionOfAction.wav"));
-            resetAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "reset.wav"));
-        }
-
-        /// <summary>
         /// Метод сброса графа
         /// </summary>
         public virtual void Reset()
@@ -259,38 +246,6 @@ namespace Graph
             OnResetGraph();
             if (SoundsOn)
                 resetAction.Play();
-            Invalidate();
-        }
-
-        /// <summary>
-        /// Метод добавления вершины на граф
-        /// </summary>
-        /// <param name="x">x координата вершины</param>
-        /// <param name="y">y координата вершины</param>
-        protected virtual void addVertex(int x, int y)
-        {
-            if ((x <= Math.Min(Height, Width) / 15) || (x >= Width - Math.Min(Height, Width) / 15) || (y <= Math.Min(Height, Width) / 15) || (y >= Height - Math.Min(Height, Width) / 15))
-            {
-                if (SoundsOn)
-                    prohibitionOfAction.Play();
-                return;
-            }
-            foreach (VertexCoordinatesEdge v in vertexCoordinates)
-            {
-                if (((x <= v.x + _VertexSize && x >= v.x - _VertexSize) && (y <= v.y + _VertexSize && y >= v.y - _VertexSize)))
-                {
-                    if (SoundsOn)
-                        prohibitionOfAction.Play();
-                    return;
-                }
-            }
-            _VertexCount++;
-            vertexCoordinates.Add(new VertexCoordinatesEdge(_VertexCount.ToString(), x, y, false));
-            _graph.AddVertex(_VertexCount.ToString());
-            OnVertexAdd();
-            //_IsVertexAddMode = false;
-            if (SoundsOn)
-                addVertexOrEdge.Play();
             Invalidate();
         }
 
@@ -353,22 +308,133 @@ namespace Graph
             }
             if (src != null && dst != null)
             {
-                    EdgeCoordinates buf = null;
-                    for(int i= 0;i<=edgeCoordinates.Count;i++)
-                    {
+                EdgeCoordinates buf = null;
+                for (int i = 0; i <= edgeCoordinates.Count; i++)
+                {
                     EdgeCoordinates edge = edgeCoordinates[i];
-                        if ((edge.src == src && edge.dst == dst) || (edge.src == dst && edge.dst == src))
-                        {
+                    if ((edge.src == src && edge.dst == dst) || (edge.src == dst && edge.dst == src))
+                    {
                         edgeCoordinates.RemoveAt(i);
-                            if (SoundsOn)
-                                resetAction.Play();
+                        if (SoundsOn)
+                            resetAction.Play();
                         break;
                     }
-                    }
+                }
                 //edgeCoordinates.Remove(buf);
                 Invalidate();
                 _graph.RemoveEdge(src, dst);
             }
+        }
+
+
+        /// <summary>
+        /// Метод удаления вершины с графа
+        /// <param name="vertexName">имя вершины</param>
+        /// </summary>
+        public virtual void removeVertex(string vertexName)
+        {
+            removeEdgesForVertex(vertexName);
+            var vertex = _graph.FindVertex(vertexName);
+            if (vertex == null)
+            {
+                if (SoundsOn)
+                    prohibitionOfAction.Play();
+                return;
+            }
+            VertexCoordinatesEdge ver = null;
+            foreach (VertexCoordinatesEdge v in vertexCoordinates)
+            {
+                if (v.name == vertexName)
+                {
+                    ver = v; break;
+                }
+            }
+            vertexCoordinates.Remove(ver);
+            _graph.RemoveVertex(vertex);
+            if (SoundsOn)
+                resetAction.Play();
+            ResetShortestPath();
+            Invalidate();
+        }
+
+        /// <summary>
+        /// Метод поиска кратчайшего пути в графе
+        /// </summary>
+        public virtual string FindShortestPath(string src, string dst)
+        {
+            ResetShortestPath();
+            _shortestPath = new GraphShortestPath(_graph);
+            var vertices = _shortestPath.FindShortestPath(src, dst);
+            SetShortestPath(vertices);
+            if (vertices.Count > 0) OnFindShortestPath();
+            Invalidate();
+            string buf = "";
+            foreach (string vertex in vertices)
+            {
+                if (buf != "") buf += ", ";
+                buf += vertex;
+            }
+            if (SoundsOn)
+                if (buf != "") findAction.Play(); else prohibitionOfAction.Play();
+            return buf;
+        }
+        
+        /// <summary>
+        /// Метод смены состояний полотна
+        /// </summary>
+        public virtual void State()
+        {
+            int I = (int)_ObjState + 1;
+            I = I > 1 ? 0 : I;
+            ObjState = (ObjStates)I;
+            if (SoundsOn)
+                changeState.Play();
+            OnChangeState();
+        }
+
+        /// <summary>
+        /// Метод инициализации звуков
+        /// </summary>
+        protected virtual void InitSounds()
+        {
+            var exePath = Environment.CurrentDirectory;
+            addVertexOrEdge = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "addVertexOrEdge.wav"));
+            changeState = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "changeState.wav"));
+            findAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "findAction.wav"));
+            prohibitionOfAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "prohibitionOfAction.wav"));
+            resetAction = new System.Media.SoundPlayer(Path.Combine(exePath, @"sounds\", "reset.wav"));
+        }
+
+        /// <summary>
+        /// Метод добавления вершины на граф
+        /// </summary>
+        /// <param name="x">x координата вершины</param>
+        /// <param name="y">y координата вершины</param>
+        protected virtual void addVertex(int x, int y)
+        {
+            if ((x <= Math.Min(Height, Width) / 15) || (x >= Width - Math.Min(Height, Width) / 15) || (y <= Math.Min(Height, Width) / 15) || (y >= Height - Math.Min(Height, Width) / 15))
+            {
+                if (SoundsOn)
+                    prohibitionOfAction.Play();
+                return;
+            }
+            foreach (VertexCoordinatesEdge v in vertexCoordinates)
+            {
+                if (((x <= v.x + _VertexSize && x >= v.x - _VertexSize) && (y <= v.y + _VertexSize && y >= v.y - _VertexSize)))
+                {
+                    if (SoundsOn)
+                        prohibitionOfAction.Play();
+                    return;
+                }
+            }
+            _VertexCount++;
+            vertexCoordinates.Add(new VertexCoordinatesEdge(_VertexCount.ToString(), x, y, false));
+            _graph.AddVertex(_VertexCount.ToString());
+            OnVertexAdd();
+            //_IsVertexAddMode = false;
+            if (SoundsOn)
+                addVertexOrEdge.Play();
+            Invalidate();
         }
 
         /// <summary>
@@ -394,61 +460,10 @@ namespace Graph
                         edgeCoordinates = buf;
                         Invalidate();
                         _graph.RemoveEdge(src, "");
-                    }catch (Exception e) { }
+                    }
+                    catch (Exception e) { }
                 }
             }
-        }
-
-        /// <summary>
-        /// Метод удаления вершины с графа
-        /// <param name="vertexName">имя вершины</param>
-        /// </summary>
-        public virtual void removeVertex(string vertexName)
-        {
-            removeEdgesForVertex(vertexName);
-            var vertex=_graph.FindVertex(vertexName);
-            if (vertex == null)
-            {
-                if (SoundsOn)
-                    prohibitionOfAction.Play();
-                return;
-            }
-            VertexCoordinatesEdge ver=null;
-            foreach (VertexCoordinatesEdge v in vertexCoordinates)
-            {
-                if (v.name==vertexName)
-                {
-                    ver = v; break;
-                }
-            }
-            vertexCoordinates.Remove(ver);
-            _graph.RemoveVertex(vertex);
-            if (SoundsOn)
-                resetAction.Play();
-            ResetShortestPath() ;
-            Invalidate();
-        }
-
-        /// <summary>
-        /// Метод поиска кратчайшего пути в графе
-        /// </summary>
-        public virtual string FindShortestPath(string src, string dst)
-        {
-            ResetShortestPath();
-            _shortestPath = new GraphShortestPath(_graph);
-            var vertices = _shortestPath.FindShortestPath(src, dst);
-            SetShortestPath(vertices);
-            if (vertices.Count > 0) OnFindShortestPath();
-            Invalidate();
-            string buf = "";
-            foreach (string vertex in vertices)
-            {
-                if (buf != "") buf += ", ";
-                buf += vertex;
-            }
-            if (SoundsOn)
-                if (buf != "") findAction.Play(); else prohibitionOfAction.Play();
-            return buf;
         }
 
         /// <summary>
@@ -498,19 +513,6 @@ namespace Graph
                 }
             }
             Invalidate();
-        }
-
-        /// <summary>
-        /// Метод смены состояний полотна
-        /// </summary>
-        public virtual void State()
-        {
-            int I = (int)_ObjState + 1;
-            I = I > 1 ? 0 : I;
-            ObjState = (ObjStates)I;
-            if (SoundsOn)
-                changeState.Play();
-            OnChangeState();
         }
 
         /// <summary>
@@ -784,7 +786,7 @@ namespace Graph
             // Проверяем, попали ли мы в какое-либо ребро
             for (int i = 0; i < edgeCoordinates.Count; i++)
             {
-                Tuple<Point, Point> edge;  
+                Tuple<Point, Point> edge;
                 if (IsPointOnEdge(e.Location, edgeCoordinates[i].x1, edgeCoordinates[i].y1, edgeCoordinates[i].x2, edgeCoordinates[i].y2))
                 {
                     // Отображаем предупреждение об удалении
@@ -800,7 +802,7 @@ namespace Graph
         }
 
         // Метод для проверки, попадает ли точка на ребро
-        private bool IsPointOnEdge(Point point, int x1,int y1, int x2, int y2)
+        private bool IsPointOnEdge(Point point, int x1, int y1, int x2, int y2)
         {
             const int tolerance = 3; // Допустимое отклонение от ребра
 

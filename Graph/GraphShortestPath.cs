@@ -10,7 +10,7 @@ namespace Graph
     {
         // Конструктор
         public GraphShortestPath(MyGraph graph)
-        { 
+        {
             _graph = graph;
         }
 
@@ -30,7 +30,7 @@ namespace Graph
         // Получение информации о вершине
         private VertexInfo GetVertexInfo(MyVertex v)
         {
-            foreach(VertexInfo info in _infos)
+            foreach (VertexInfo info in _infos)
             {
                 if (info.vertex.Equals(v))
                 {
@@ -47,7 +47,7 @@ namespace Graph
             VertexInfo minVertexInfo = null;
             foreach (VertexInfo info in _infos)
             {
-                if(info.isUnvisited && info.edgesWeightSum < minValue)
+                if (info.isUnvisited && info.edgesWeightSum < minValue)
                 {
                     minVertexInfo = info;
                     minValue = info.edgesWeightSum;
@@ -88,11 +88,11 @@ namespace Graph
         private void SetSumToNextVertex(VertexInfo info)
         {
             info.isUnvisited = false;
-            foreach(var edge in info.vertex.edges)
+            foreach (var edge in info.vertex.edges)
             {
                 var nextInfo = GetVertexInfo(edge.connectedVertex);
                 var sum = info.edgesWeightSum + edge.weight;
-                if(sum < nextInfo.edgesWeightSum)
+                if (sum < nextInfo.edgesWeightSum)
                 {
                     nextInfo.edgesWeightSum = sum;
                     nextInfo.previousVertex = info.vertex;
@@ -104,27 +104,27 @@ namespace Graph
         private List<string> GetPath(MyVertex src, MyVertex dst)
         {
             if (dst == null) return new List<string>();
-            if(src == null) return new List<string>();
+            if (src == null) return new List<string>();
             var path = dst.ToString();
             while (src != dst)
             {
                 try
                 {
-                dst = GetVertexInfo(dst).previousVertex;
+                    dst = GetVertexInfo(dst).previousVertex;
                     if (dst == null) return new List<string>();
                     path = dst.ToString() + "?" + path;
                 }
                 catch
                 {
-                return new List<string>();
+                    return new List<string>();
                 }
             }
             string buf = "";
             List<string> list = new List<string>();
-            for(int i=0; i < path.Length;i++)
+            for (int i = 0; i < path.Length; i++)
             {
-                if (path[i]!='?') 
-                { 
+                if (path[i] != '?')
+                {
                     buf += path[i];
                 }
                 else
@@ -139,17 +139,5 @@ namespace Graph
             }
             return list;
         }
-
-        /*private List<string> GetPath(MyVertex src, MyVertex dst)
-        {
-            var path = new List<string>();
-            path.Add(dst.ToString());
-            while (src != dst)
-            {
-                dst = GetVertexInfo(dst).previousVertex;
-                path.Add(dst.ToString());
-            }
-            return path;
-        }*/
     }
 }
