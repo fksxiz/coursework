@@ -51,8 +51,8 @@
             this.RemoveVertexButton = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.EdgeModeButton = new System.Windows.Forms.Button();
-            this.graphEditor1 = new Graph.GraphEditor();
             this.DeleteModeButton = new System.Windows.Forms.Button();
+            this.graphEditor1 = new Graph.GraphEditor();
             this.SuspendLayout();
             // 
             // AddVertexButton
@@ -254,11 +254,22 @@
             this.EdgeModeButton.UseVisualStyleBackColor = true;
             this.EdgeModeButton.Click += new System.EventHandler(this.EdgeModeButton_Click);
             // 
+            // DeleteModeButton
+            // 
+            this.DeleteModeButton.Location = new System.Drawing.Point(178, 41);
+            this.DeleteModeButton.Name = "DeleteModeButton";
+            this.DeleteModeButton.Size = new System.Drawing.Size(79, 23);
+            this.DeleteModeButton.TabIndex = 31;
+            this.DeleteModeButton.Text = "delete mode";
+            this.DeleteModeButton.UseVisualStyleBackColor = true;
+            this.DeleteModeButton.Click += new System.EventHandler(this.DeleteModeButton_Click);
+            // 
             // graphEditor1
             // 
             this.graphEditor1.BackColor = System.Drawing.Color.AliceBlue;
             this.graphEditor1.DarkColor = System.Drawing.Color.DarkGray;
             this.graphEditor1.EdgeColor = System.Drawing.Color.Gray;
+            this.graphEditor1.IsDeleteMode = false;
             this.graphEditor1.IsEdgeAddMode = false;
             this.graphEditor1.IsVertexAddMode = false;
             this.graphEditor1.LightColor = System.Drawing.Color.Gray;
@@ -272,16 +283,14 @@
             this.graphEditor1.Text = "graphEditor1";
             this.graphEditor1.TextColor = System.Drawing.Color.Red;
             this.graphEditor1.VertexColor = System.Drawing.Color.Black;
-            // 
-            // DeleteModeButton
-            // 
-            this.DeleteModeButton.Location = new System.Drawing.Point(178, 41);
-            this.DeleteModeButton.Name = "DeleteModeButton";
-            this.DeleteModeButton.Size = new System.Drawing.Size(79, 23);
-            this.DeleteModeButton.TabIndex = 31;
-            this.DeleteModeButton.Text = "delete mode";
-            this.DeleteModeButton.UseVisualStyleBackColor = true;
-            this.DeleteModeButton.Click += new System.EventHandler(this.DeleteModeButton_Click);
+            this.graphEditor1.ChangeState += new System.EventHandler(this.graphEditor1_ChangeState);
+            this.graphEditor1.VertexAdd += new System.EventHandler(this.graphEditor1_VertexAdd);
+            this.graphEditor1.VertexRemove += new System.EventHandler(this.graphEditor1_VertexRemove);
+            this.graphEditor1.EdgeAdd += new System.EventHandler(this.graphEditor1_EdgeAdd);
+            this.graphEditor1.EdgeRemove += new System.EventHandler(this.graphEditor1_EdgeRemove);
+            this.graphEditor1.FindedShortestPath += new System.EventHandler(this.graphEditor1_FindedShortestPath);
+            this.graphEditor1.ResetGraph += new System.EventHandler(this.graphEditor1_ResetGraph);
+            this.graphEditor1.Click += new System.EventHandler(this.graphEditor1_Click_1);
             // 
             // Form1
             // 

@@ -323,6 +323,7 @@ namespace Graph
                 //edgeCoordinates.Remove(buf);
                 ResetShortestPath();
                 _graph.RemoveEdge(src, dst);
+                OnEdgeRemove();
                 Invalidate();
             }
         }
@@ -355,6 +356,7 @@ namespace Graph
             if (SoundsOn)
                 resetAction.Play();
             ResetShortestPath();
+            OnVertexRemove();
             Invalidate();
         }
 
@@ -903,7 +905,9 @@ namespace Graph
         //События
         protected event EventHandler _OnChangeState;
         protected event EventHandler _OnVertexAdd;
+        protected event EventHandler _OnVertexRemove;
         protected event EventHandler _OnEdgeAdd;
+        protected event EventHandler _OnEdgeRemove;
         protected event EventHandler _OnFindShortestPath;
         protected event EventHandler _OnReset;
 
@@ -929,6 +933,17 @@ namespace Graph
                 _OnVertexAdd -= value;
             }
         }
+        public event EventHandler VertexRemove
+        {
+            add
+            {
+                _OnVertexRemove += value;
+            }
+            remove
+            {
+                _OnVertexRemove -= value;
+            }
+        }
         public event EventHandler EdgeAdd
         {
             add
@@ -938,6 +953,17 @@ namespace Graph
             remove
             {
                 _OnEdgeAdd -= value;
+            }
+        }
+        public event EventHandler EdgeRemove
+        {
+            add
+            {
+                _OnEdgeRemove += value;
+            }
+            remove
+            {
+                _OnEdgeRemove -= value;
             }
         }
         public event EventHandler FindedShortestPath
@@ -977,11 +1003,25 @@ namespace Graph
                 _OnVertexAdd.Invoke(this, new EventArgs());
             }
         }
+        protected void OnVertexRemove()
+        {
+            if (_OnVertexRemove != null)
+            {
+                _OnVertexRemove.Invoke(this, new EventArgs());
+            }
+        }
         protected void OnEdgeAdd()
         {
             if (_OnEdgeAdd != null)
             {
                 _OnEdgeAdd.Invoke(this, new EventArgs());
+            }
+        }
+        protected void OnEdgeRemove()
+        {
+            if (_OnEdgeRemove != null)
+            {
+                _OnEdgeRemove.Invoke(this, new EventArgs());
             }
         }
         protected void OnFindShortestPath()

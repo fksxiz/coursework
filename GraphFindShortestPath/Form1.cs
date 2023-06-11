@@ -187,5 +187,20 @@ namespace GraphFindShortestPath
                 graphEditor1.IsDeleteMode = true;
             }
         }
+
+        private void graphEditor1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void graphEditor1_VertexRemove(object sender, EventArgs e)
+        {
+            EventsListBox.Items.Add("Вершина удалена");
+        }
+
+        private void graphEditor1_EdgeRemove(object sender, EventArgs e)
+        {
+            EventsListBox.Items.Add("Грань удалена");
+        }
     }
 }
