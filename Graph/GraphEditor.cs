@@ -773,7 +773,7 @@ namespace Graph
                 if (nodeBounds.Contains(e.Location))
                 {
                     // Подсвечиваем выбранный элемент
-                    _selectedVertex = i;
+                    //_selectedVertex = i;
                     Invalidate(); // Перерисовываем компонент
 
                     // Отображаем предупреждение об удалении
