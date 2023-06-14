@@ -26,3 +26,17 @@ F:\VS c#\GraphFindShPath\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.c
 F:\VS c#\GraphFindShPath\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.csproj.CopyComplete
 F:\VS c#\GraphFindShPath\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.exe
 F:\VS c#\GraphFindShPath\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.pdb
+F:\VS c#\coursework\GraphFindShortestPath\bin\Debug\GraphFindShortestPath.exe.config
+F:\VS c#\coursework\GraphFindShortestPath\bin\Debug\GraphFindShortestPath.exe
+F:\VS c#\coursework\GraphFindShortestPath\bin\Debug\GraphFindShortestPath.pdb
+F:\VS c#\coursework\GraphFindShortestPath\bin\Debug\Graph.dll
+F:\VS c#\coursework\GraphFindShortestPath\bin\Debug\Graph.pdb
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.csproj.AssemblyReference.cache
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.csproj.SuggestedBindingRedirects.cache
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.Form1.resources
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.Properties.Resources.resources
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.csproj.GenerateResource.cache
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.csproj.CoreCompileInputs.cache
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.csproj.CopyComplete
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.exe
+F:\VS c#\coursework\GraphFindShortestPath\obj\Debug\GraphFindShortestPath.pdb

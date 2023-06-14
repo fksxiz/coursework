@@ -10,3 +10,9 @@ F:\VS c#\GraphFindShPath\Graph\obj\Debug\Graph.csproj.AssemblyReference.cache
 F:\VS c#\GraphFindShPath\Graph\obj\Debug\Graph.csproj.CoreCompileInputs.cache
 F:\VS c#\GraphFindShPath\Graph\obj\Debug\Graph.dll
 F:\VS c#\GraphFindShPath\Graph\obj\Debug\Graph.pdb
+F:\VS c#\coursework\Graph\bin\Debug\Graph.dll
+F:\VS c#\coursework\Graph\bin\Debug\Graph.pdb
+F:\VS c#\coursework\Graph\obj\Debug\Graph.csproj.AssemblyReference.cache
+F:\VS c#\coursework\Graph\obj\Debug\Graph.csproj.CoreCompileInputs.cache
+F:\VS c#\coursework\Graph\obj\Debug\Graph.dll
+F:\VS c#\coursework\Graph\obj\Debug\Graph.pdb

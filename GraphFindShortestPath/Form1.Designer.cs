@@ -283,6 +283,7 @@
             this.graphEditor1.Text = "graphEditor1";
             this.graphEditor1.TextColor = System.Drawing.Color.Red;
             this.graphEditor1.VertexColor = System.Drawing.Color.Black;
+            this.graphEditor1.VertexSize = 200;
             this.graphEditor1.ChangeState += new System.EventHandler(this.graphEditor1_ChangeState);
             this.graphEditor1.VertexAdd += new System.EventHandler(this.graphEditor1_VertexAdd);
             this.graphEditor1.VertexRemove += new System.EventHandler(this.graphEditor1_VertexRemove);

@@ -28,6 +28,7 @@ namespace Graph
             _graph = new MyGraph();
             _VertexCount = 0;
             _SoundsOn = true;
+            _VertexSize = 20;
             vertexCoordinates = new List<VertexCoordinatesEdge>();
             edgeCoordinates = new List<EdgeCoordinates>();
             InitSounds();
@@ -45,7 +46,6 @@ namespace Graph
         private System.Media.SoundPlayer resetAction;
         private int _selectedVertex = -1;
         private int startNodeIndex = -1;
-        protected int _VertexSize;
         protected int _VertexCount;
 
         //свойства
@@ -60,6 +60,7 @@ namespace Graph
         protected bool _SoundsOn;
         protected bool _IsEdgeAddMode;
         protected bool _IsDeleteMode;
+        protected int _VertexSize;
 
         public enum ObjStates
         {
@@ -90,6 +91,18 @@ namespace Graph
                     _IsEdgeAddMode = value;
                     _IsVertexAddMode = false;
                     _IsDeleteMode = false;
+                }
+            }
+        }
+
+        public virtual int VertexSize
+        {
+            get { return _VertexSize; }
+            set
+            {
+                if (_VertexSize != value)
+                {
+                    _VertexSize = value;
                 }
             }
         }
@@ -531,7 +544,6 @@ namespace Graph
             {
                 height = 400;
             }
-            _VertexSize = 20;
             base.SetBoundsCore(x, y, width, height, specified);
             Invalidate();
         }
