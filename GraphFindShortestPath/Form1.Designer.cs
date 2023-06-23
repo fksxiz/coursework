@@ -268,6 +268,9 @@
             // 
             // graphEditor1
             // 
+            this.graphEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.graphEditor1.BackColor = System.Drawing.Color.AliceBlue;
             this.graphEditor1.DarkColor = System.Drawing.Color.DarkGray;
             this.graphEditor1.EdgeColor = System.Drawing.Color.Gray;
@@ -318,7 +321,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 496);
+            this.ClientSize = new System.Drawing.Size(800, 476);
             this.Controls.Add(this.modeLabel);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.DeleteModeButton);
@@ -345,6 +348,7 @@
             this.Controls.Add(this.srcTextBox);
             this.Controls.Add(this.addEdgeButton);
             this.Controls.Add(this.AddVertexButton);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
