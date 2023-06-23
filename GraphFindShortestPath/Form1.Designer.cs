@@ -53,6 +53,8 @@
             this.EdgeModeButton = new System.Windows.Forms.Button();
             this.DeleteModeButton = new System.Windows.Forms.Button();
             this.graphEditor1 = new Graph.GraphEditor();
+            this.label7 = new System.Windows.Forms.Label();
+            this.modeLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // AddVertexButton
@@ -180,9 +182,9 @@
             this.EventsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.EventsListBox.FormattingEnabled = true;
-            this.EventsListBox.Location = new System.Drawing.Point(12, 336);
+            this.EventsListBox.Location = new System.Drawing.Point(12, 362);
             this.EventsListBox.Name = "EventsListBox";
-            this.EventsListBox.Size = new System.Drawing.Size(245, 95);
+            this.EventsListBox.Size = new System.Drawing.Size(245, 108);
             this.EventsListBox.TabIndex = 20;
             // 
             // ResetButton
@@ -277,13 +279,13 @@
             this.graphEditor1.Name = "graphEditor1";
             this.graphEditor1.ObjState = Graph.GraphEditor.ObjStates.osConvex;
             this.graphEditor1.ShortestPathColor = System.Drawing.Color.Green;
-            this.graphEditor1.Size = new System.Drawing.Size(524, 419);
+            this.graphEditor1.Size = new System.Drawing.Size(524, 458);
             this.graphEditor1.SoundsOn = true;
             this.graphEditor1.TabIndex = 30;
             this.graphEditor1.Text = "graphEditor1";
             this.graphEditor1.TextColor = System.Drawing.Color.Red;
             this.graphEditor1.VertexColor = System.Drawing.Color.Black;
-            this.graphEditor1.VertexSize = 200;
+            this.graphEditor1.VertexSize = 20;
             this.graphEditor1.ChangeState += new System.EventHandler(this.graphEditor1_ChangeState);
             this.graphEditor1.VertexAdd += new System.EventHandler(this.graphEditor1_VertexAdd);
             this.graphEditor1.VertexRemove += new System.EventHandler(this.graphEditor1_VertexRemove);
@@ -293,11 +295,32 @@
             this.graphEditor1.ResetGraph += new System.EventHandler(this.graphEditor1_ResetGraph);
             this.graphEditor1.Click += new System.EventHandler(this.graphEditor1_Click_1);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(56, 340);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(36, 13);
+            this.label7.TabIndex = 32;
+            this.label7.Text = "mode:";
+            // 
+            // modeLabel
+            // 
+            this.modeLabel.AutoSize = true;
+            this.modeLabel.Location = new System.Drawing.Point(98, 340);
+            this.modeLabel.Name = "modeLabel";
+            this.modeLabel.Size = new System.Drawing.Size(10, 13);
+            this.modeLabel.TabIndex = 33;
+            this.modeLabel.Text = "-";
+            this.modeLabel.Click += new System.EventHandler(this.label8_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 496);
+            this.Controls.Add(this.modeLabel);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.DeleteModeButton);
             this.Controls.Add(this.graphEditor1);
             this.Controls.Add(this.EdgeModeButton);
@@ -356,6 +379,8 @@
         private System.Windows.Forms.Button EdgeModeButton;
         private Graph.GraphEditor graphEditor1;
         private System.Windows.Forms.Button DeleteModeButton;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label modeLabel;
     }
 }
 

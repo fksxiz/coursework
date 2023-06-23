@@ -27,7 +27,7 @@ namespace Graph
             _LightColor = Color.Gray;
             _graph = new MyGraph();
             _VertexCount = 0;
-            _SoundsOn = true;
+            _SoundsOn = false;
             _VertexSize = 20;
             vertexCoordinates = new List<VertexCoordinatesEdge>();
             edgeCoordinates = new List<EdgeCoordinates>();

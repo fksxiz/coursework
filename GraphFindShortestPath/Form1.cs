@@ -24,10 +24,12 @@ namespace GraphFindShortestPath
             if (graphEditor1.IsVertexAddMode)
             {
                 graphEditor1.IsVertexAddMode = false;
+                modeLabel.Text = "-";
             }
             else
             {
                 graphEditor1.IsVertexAddMode = true;
+                modeLabel.Text = "Режим добавления вершин";
             }
              
         }
@@ -169,10 +171,12 @@ namespace GraphFindShortestPath
             if (graphEditor1.IsEdgeAddMode)
             {
                 graphEditor1.IsEdgeAddMode = false;
+                modeLabel.Text = "-";
             }
             else
             {
                 graphEditor1.IsEdgeAddMode = true;
+                modeLabel.Text = "Режим добавления рёбер";
             }
         }
 
@@ -181,10 +185,12 @@ namespace GraphFindShortestPath
             if (graphEditor1.IsDeleteMode)
             {
                 graphEditor1.IsDeleteMode = false;
+                modeLabel.Text = "-";
             }
             else
             {
                 graphEditor1.IsDeleteMode = true;
+                modeLabel.Text = "Режим удаления";
             }
         }
 
@@ -201,6 +207,11 @@ namespace GraphFindShortestPath
         private void graphEditor1_EdgeRemove(object sender, EventArgs e)
         {
             EventsListBox.Items.Add("Грань удалена");
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
